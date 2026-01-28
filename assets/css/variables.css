@@ -1,0 +1,149 @@
+/* ========================================
+   VARIABLES CSS - SISTEMA ESCOLAR
+   Paleta Profesional: Azul Marino, Gris Elegante, Dorado Sutil, Blanco
+   ======================================== */
+
+:root {
+    /* ===== PALETA DE COLORES PROFESIONAL ===== */
+    --color-white: #ffffff;
+    --color-off-white: #f8f9fa;
+    --color-gray-light: #e9ecef;
+    --color-gray-medium: #95a5a6;
+    --color-gray-dark: #2c3e50;
+    --color-blue-primary: #2c3e50;
+    --color-blue-secondary: #3498db;
+    --color-gold-accent: #f39c12;
+    --color-gold-light: #f1c40f;
+    
+    /* ===== COLORES DERIVADOS ===== */
+    --color-blue-light: #34495e;
+    --color-blue-dark: #1a252f;
+    --color-gold-dark: #d35400;
+    --color-border: #dee2e6;
+    --color-text: #2c3e50;
+    --color-text-secondary: #7f8c8d;
+    
+    /* ===== COLORES DE SISTEMA ===== */
+    --primary-color: var(--color-blue-primary);
+    --secondary-color: var(--color-blue-secondary);
+    --accent-color: var(--color-gold-accent);
+    --background-color: var(--color-off-white);
+    --text-color: var(--color-text);
+    --border-color: var(--color-border);
+    
+    /* ===== COLORES DE ESTADO ===== */
+    --success-color: #27ae60;
+    --info-color: #3498db;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+    
+    /* ===== ESPACIADO ===== */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-xxl: 3rem;
+    
+    /* ===== BORDER RADIUS ===== */
+    --border-radius-sm: 0.25rem;
+    --border-radius-md: 0.5rem;
+    --border-radius-lg: 0.75rem;
+    --border-radius-xl: 1rem;
+    --border-radius-xxl: 1.5rem;
+    --border-radius-full: 9999px;
+    
+    /* ===== SHADOWS ===== */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --shadow-xl: 0 8px 20px rgba(0, 0, 0, 0.18);
+    
+    /* ===== FONTS ===== */
+    --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-secondary: 'Roboto', sans-serif;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-md: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-xxl: 1.5rem;
+    --font-size-xxxl: 2rem;
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    /* ===== TRANSITIONS ===== */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* ===== Z-INDEX ===== */
+    --z-index-sidebar: 1000;
+    --z-index-modal: 1050;
+    --z-index-navbar: 900;
+    --z-index-toggle: 999;
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] {
+    --color-white: #1a1a1a;
+    --color-off-white: #121212;
+    --color-gray-light: #2d2d2d;
+    --color-gray-medium: #95a5a6;
+    --color-gray-dark: #e0e0e0;
+    --color-blue-primary: #3498db;
+    --color-blue-secondary: #2980b9;
+    --color-gold-accent: #f39c12;
+    --color-gold-light: #f1c40f;
+    
+    --color-blue-light: #34495e;
+    --color-blue-dark: #1a252f;
+    --color-gold-dark: #d35400;
+    --color-border: #3d3d3d;
+    --color-text: #e0e0e0;
+    --color-text-secondary: #bdc3c7;
+    
+    --primary-color: var(--color-blue-secondary);
+    --secondary-color: var(--color-blue-primary);
+    --accent-color: var(--color-gold-accent);
+    --background-color: #0f0f0f;
+    --text-color: var(--color-text);
+    --border-color: var(--color-border);
+    
+    --success-color: #2ecc71;
+    --info-color: #3498db;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+}
+
+/* ===== VARIABLES DE GRADIENTES ===== */
+.gradient-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+}
+
+.gradient-secondary {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+}
+
+.gradient-accent {
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--color-gold-dark) 100%);
+}
+
+.gradient-success {
+    background: linear-gradient(135deg, var(--success-color) 0%, #219653 100%);
+}
+
+.gradient-info {
+    background: linear-gradient(135deg, var(--info-color) 0%, #2980b9 100%);
+}
+
+.gradient-warning {
+    background: linear-gradient(135deg, var(--warning-color) 0%, #d35400 100%);
+}
+
+.gradient-danger {
+    background: linear-gradient(135deg, var(--danger-color) 0%, #c0392b 100%);
+}

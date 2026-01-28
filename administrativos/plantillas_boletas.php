@@ -148,53 +148,53 @@ $default_css = '
     max-width: 800px;
     margin: 0 auto;
     padding: 30px;
-    border: 3px solid #667eea;
-    border-radius: 15px;
-    background: #fff;
+    border: 3px solid var(--primary-color);
+    border-radius: var(--border-radius-xl);
+    background: var(--color-white);
 }
 
 .header {
     text-align: center;
     margin-bottom: 30px;
     padding-bottom: 20px;
-    border-bottom: 2px solid #667eea;
+    border-bottom: 2px solid var(--primary-color);
 }
 
 .header h2 {
-    color: #667eea;
+    color: var(--primary-color);
     margin-bottom: 10px;
-    font-size: 24px;
+    font-size: var(--font-size-xxl);
 }
 
 .header p {
-    color: #666;
+    color: var(--color-text-secondary);
     margin: 0;
 }
 
 .student-info {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
+    background: var(--color-gray-light);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    margin-bottom: var(--spacing-md);
 }
 
 .info-row {
     display: flex;
-    margin-bottom: 10px;
+    margin-bottom: var(--spacing-xs);
 }
 
 .info-row .label {
-    font-weight: bold;
-    color: #333;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-color);
     width: 200px;
 }
 
 .info-row .value {
-    color: #666;
+    color: var(--color-text-secondary);
 }
 
 .grades-table {
-    margin-bottom: 30px;
+    margin-bottom: var(--spacing-xl);
 }
 
 .grades-table table {
@@ -203,16 +203,16 @@ $default_css = '
 }
 
 .grades-table th {
-    background: #667eea;
-    color: white;
-    padding: 12px;
+    background: var(--primary-color);
+    color: var(--color-white);
+    padding: var(--spacing-sm);
     text-align: left;
-    font-weight: 600;
+    font-weight: var(--font-weight-semibold);
 }
 
 .grades-table td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
+    padding: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .grades-table tr:last-child td {
@@ -220,15 +220,15 @@ $default_css = '
 }
 
 .grades-table tr:hover {
-    background: #f8f9fa;
+    background: var(--color-gray-light);
 }
 
 .footer {
     display: flex;
     justify-content: space-between;
-    margin-top: 40px;
-    padding-top: 20px;
-    border-top: 2px solid #667eea;
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-md);
+    border-top: 2px solid var(--primary-color);
 }
 
 .signature {
@@ -236,13 +236,13 @@ $default_css = '
 }
 
 .signature p:first-child {
-    margin-bottom: 30px;
-    font-weight: bold;
+    margin-bottom: var(--spacing-md);
+    font-weight: var(--font-weight-bold);
 }
 
 .signature p:last-child {
-    color: #666;
-    font-size: 14px;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
 }
 ';
 ?>
@@ -256,119 +256,21 @@ $default_css = '
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.2/lib/codemirror.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.2/theme/monokai.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
     <style>
-        :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-        }
-        
-        body {
-            background: #f5f7fa;
-        }
-        
-        .sidebar {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            min-height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 280px;
-            z-index: 1000;
-        }
-        
-        .sidebar-header {
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .sidebar-header h3 {
-            color: white;
-            margin: 10px 0;
-            font-weight: 600;
-        }
-        
-        .sidebar-menu {
-            padding: 20px 0;
-        }
-        
-        .sidebar-menu .nav-item {
-            margin-bottom: 5px;
-        }
-        
-        .sidebar-menu .nav-link {
-            color: rgba(255,255,255,0.8);
-            padding: 12px 20px;
-            border-radius: 0 25px 25px 0;
-            margin-right: 10px;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-        
-        .sidebar-menu .nav-link.active {
-            color: white;
-            background: rgba(255,255,255,0.15);
-            margin-right: 0;
-        }
-        
-        .sidebar-menu .nav-link:hover:not(.active) {
-            color: white;
-            background: rgba(255,255,255,0.1);
-            margin-right: 0;
-        }
-        
-        .sidebar-menu .nav-link i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-        
-        .main-content {
-            margin-left: 280px;
-        }
-        
-        .navbar {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .page-header {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .template-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-            transition: all 0.3s;
-            border-left: 4px solid var(--primary-color);
-        }
-        
-        .template-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
-        }
-        
         .CodeMirror {
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
             height: 400px;
-            margin-bottom: 20px;
+            margin-bottom: var(--spacing-md);
         }
         
         .preview-container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            margin-top: 20px;
+            background: var(--color-white);
+            padding: var(--spacing-xl);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            margin-top: var(--spacing-md);
             max-height: 600px;
             overflow-y: auto;
         }
@@ -377,28 +279,35 @@ $default_css = '
             max-width: 95%;
         }
         
-        .badge-activa {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        .examples-list {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: var(--spacing-md);
+            background: var(--color-gray-light);
+            border-radius: var(--border-radius-md);
+            margin-top: var(--spacing-md);
         }
         
-        .badge-inactiva {
-            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+        .examples-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
         
-        .btn-custom {
-            border-radius: 10px;
-            padding: 10px 20px;
-            font-weight: 600;
-            transition: all 0.3s;
+        .examples-list li {
+            padding: var(--spacing-xs) 0;
+            border-bottom: 1px solid var(--border-color);
         }
         
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 220px;
-            }
-            .main-content {
-                margin-left: 220px;
-            }
+        .examples-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .examples-list .clave {
+            font-weight: var(--font-weight-bold);
+            color: var(--primary-color);
+            min-width: 60px;
+            display: inline-block;
         }
     </style>
 </head>
@@ -407,7 +316,7 @@ $default_css = '
     <div class="sidebar">
         <div class="sidebar-header">
             <div class="logo mb-3">
-                <i class="fas fa-graduation-cap fa-3x"></i>
+                <i class="fas fa-graduation-cap fa-2x"></i>
             </div>
             <h3><?php echo APP_NAME; ?></h3>
             <p class="text-white-50 small">Admin Panel</p>
@@ -428,6 +337,11 @@ $default_css = '
                 <li class="nav-item">
                     <a class="nav-link" href="gestion_alumnos.php">
                         <i class="fas fa-user-graduate"></i> Gestión de Alumnos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="gestion_modulos.php">
+                        <i class="fas fa-book-open"></i> Gestión de Módulos
                     </a>
                 </li>
                 <li class="nav-item">
@@ -506,7 +420,7 @@ $default_css = '
                 <div class="row align-items-center">
                     <div class="col-md-8">
                         <h2 class="mb-0">
-                            <i class="fas fa-palette me-3" style="color: var(--primary-color);"></i>
+                            <i class="fas fa-palette me-3"></i>
                             Plantillas de Boletas
                         </h2>
                         <p class="text-muted mb-0 mt-2">
@@ -515,7 +429,7 @@ $default_css = '
                         </p>
                     </div>
                     <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                        <button type="button" class="btn btn-primary btn-custom" data-bs-toggle="modal" data-bs-target="#templateModal">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#templateModal">
                             <i class="fas fa-plus me-2"></i>Nueva Plantilla
                         </button>
                     </div>
@@ -523,8 +437,8 @@ $default_css = '
             </div>
             
             <!-- Templates List -->
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0 py-3">
+            <div class="card">
+                <div class="card-header">
                     <h5 class="mb-0"><i class="fas fa-list me-2"></i>Mis Plantillas</h5>
                 </div>
                 <div class="card-body p-0">
@@ -544,7 +458,7 @@ $default_css = '
                                 <?php if (count($plantillas) > 0): ?>
                                     <?php $contador = 1; ?>
                                     <?php foreach ($plantillas as $plantilla): ?>
-                                        <tr class="template-card">
+                                        <tr>
                                             <td><?php echo $contador++; ?></td>
                                             <td>
                                                 <strong><?php echo htmlspecialchars($plantilla['nombre']); ?></strong>
@@ -561,11 +475,11 @@ $default_css = '
                                             </td>
                                             <td>
                                                 <?php if ($plantilla['activa']): ?>
-                                                    <span class="badge badge-activa">
+                                                    <span class="badge bg-success">
                                                         <i class="fas fa-check-circle me-1"></i>Activa
                                                     </span>
                                                 <?php else: ?>
-                                                    <span class="badge badge-inactiva">
+                                                    <span class="badge bg-secondary">
                                                         <i class="fas fa-times-circle me-1"></i>Inactiva
                                                     </span>
                                                 <?php endif; ?>
@@ -622,7 +536,7 @@ $default_css = '
                     <input type="hidden" name="action" id="modal_action" value="create">
                     <input type="hidden" name="id" id="template_id">
                     
-                    <div class="modal-header bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div class="modal-header gradient-primary">
                         <h5 class="modal-title text-white" id="modal_title">
                             <i class="fas fa-palette me-2"></i>Nueva Plantilla de Boleta
                         </h5>
@@ -683,7 +597,7 @@ $default_css = '
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="preview_modal_content" style="background: white; padding: 30px;"></div>
+                    <div id="preview_modal_content" style="background: var(--color-white); padding: var(--spacing-xl);"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -725,7 +639,7 @@ $default_css = '
                 <style>
                     ${css}
                 </style>
-                ${html.replace(/\{\{[^}]+\}\}/g, '<span style="color: #ff6b6b; background: #ffe8e8; padding: 2px 6px; border-radius: 3px;">$&</span>')}
+                ${html.replace(/\{\{[^}]+\}\}/g, '<span style="color: var(--warning-color); background: rgba(243, 156, 18, 0.1); padding: 2px 6px; border-radius: 3px; font-weight: bold;">$&</span>')}
             `;
             
             document.getElementById('preview_container').innerHTML = previewHtml;
@@ -737,7 +651,7 @@ $default_css = '
                 <style>
                     ${css || ''}
                 </style>
-                ${html.replace(/\{\{[^}]+\}\}/g, '<span style="color: #ff6b6b; background: #ffe8e8; padding: 2px 6px; border-radius: 3px;">$&</span>')}
+                ${html.replace(/\{\{[^}]+\}\}/g, '<span style="color: var(--warning-color); background: rgba(243, 156, 18, 0.1); padding: 2px 6px; border-radius: 3px; font-weight: bold;">$&</span>')}
             `;
             
             document.getElementById('preview_modal_content').innerHTML = previewHtml;
@@ -823,6 +737,36 @@ $default_css = '
         
         // Initialize preview on load
         updatePreview();
+    </script>
+    
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" id="darkModeToggle" title="Cambiar modo">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const body = document.body;
+            
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                body.setAttribute('data-theme', 'dark');
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            darkModeToggle.addEventListener('click', function() {
+                if (body.getAttribute('data-theme') === 'dark') {
+                    body.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                    darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                } else {
+                    body.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                }
+            });
+        });
     </script>
 </body>
 </html>

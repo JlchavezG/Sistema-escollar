@@ -1,0 +1,10 @@
+/* ========================================
+   ESTILOS PRINCIPALES - SISTEMA ESCOLAR
+   Diseño Profesional, Elegante y Sobrio
+   ======================================== */
+
+/* Importar todos los archivos CSS */
+@import url('variables.css');
+@import url('base.css');
+@import url('components.css');
+@import url('dark-mode.css');

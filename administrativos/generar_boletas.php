@@ -93,173 +93,50 @@ function getCalificacionesAlumno($alumno_id, $grado, $grupo, $mes) {
     <title>Generar Boletas - <?php echo APP_NAME; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
     <style>
-        :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-        }
-        
-        body {
-            background: #f5f7fa;
-        }
-        
-        .sidebar {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            min-height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 280px;
-            z-index: 1000;
-        }
-        
-        .sidebar-header {
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .sidebar-header h3 {
-            color: white;
-            margin: 10px 0;
-            font-weight: 600;
-        }
-        
-        .sidebar-menu {
-            padding: 20px 0;
-        }
-        
-        .sidebar-menu .nav-item {
-            margin-bottom: 5px;
-        }
-        
-        .sidebar-menu .nav-link {
-            color: rgba(255,255,255,0.8);
-            padding: 12px 20px;
-            border-radius: 0 25px 25px 0;
-            margin-right: 10px;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-        
-        .sidebar-menu .nav-link.active {
-            color: white;
-            background: rgba(255,255,255,0.15);
-            margin-right: 0;
-        }
-        
-        .sidebar-menu .nav-link:hover:not(.active) {
-            color: white;
-            background: rgba(255,255,255,0.1);
-            margin-right: 0;
-        }
-        
-        .sidebar-menu .nav-link i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-        
-        .main-content {
-            margin-left: 280px;
-        }
-        
-        .navbar {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .page-header {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
         .generator-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: var(--color-white);
+            border-radius: var(--border-radius-xl);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
         }
         
         .preview-container {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+            background: var(--color-white);
+            padding: var(--spacing-xxl);
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--spacing-xl);
             max-height: 700px;
             overflow-y: auto;
         }
         
-        .alumno-card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-            border-left: 4px solid var(--primary-color);
+        .info-section {
+            background: var(--color-gray-light);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            margin-bottom: var(--spacing-md);
         }
         
         .grade-badge {
             display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 14px;
-            margin: 2px;
+            background: var(--primary-color);
+            color: var(--color-white);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--border-radius-full);
+            font-weight: var(--font-weight-bold);
+            font-size: var(--font-size-sm);
+            margin: var(--spacing-xs);
         }
         
         .calificacion-aprobada {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            background: var(--success-color) !important;
         }
         
         .calificacion-reprobada {
-            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
-        }
-        
-        .btn-custom {
-            border-radius: 10px;
-            padding: 12px 25px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .btn-preview {
-            background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
-        }
-        
-        .btn-download {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-        }
-        
-        .btn-print {
-            background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
-        }
-        
-        .info-section {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 220px;
-            }
-            .main-content {
-                margin-left: 220px;
-            }
-            .preview-container {
-                padding: 20px;
-            }
+            background: var(--danger-color) !important;
         }
     </style>
 </head>
@@ -268,7 +145,7 @@ function getCalificacionesAlumno($alumno_id, $grado, $grupo, $mes) {
     <div class="sidebar">
         <div class="sidebar-header">
             <div class="logo mb-3">
-                <i class="fas fa-graduation-cap fa-3x"></i>
+                <i class="fas fa-graduation-cap fa-2x"></i>
             </div>
             <h3><?php echo APP_NAME; ?></h3>
             <p class="text-white-50 small">Admin Panel</p>
@@ -372,7 +249,7 @@ function getCalificacionesAlumno($alumno_id, $grado, $grupo, $mes) {
                 <div class="row align-items-center">
                     <div class="col-md-8">
                         <h2 class="mb-0">
-                            <i class="fas fa-file-alt me-3" style="color: var(--primary-color);"></i>
+                            <i class="fas fa-file-alt me-3"></i>
                             Generar Boletas Mensuales
                         </h2>
                         <p class="text-muted mb-0 mt-2">
@@ -445,7 +322,7 @@ function getCalificacionesAlumno($alumno_id, $grado, $grupo, $mes) {
                     </div>
                     
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <button type="submit" name="generar_boleta" class="btn btn-primary btn-custom">
+                        <button type="submit" name="generar_boleta" class="btn btn-primary">
                             <i class="fas fa-search me-2"></i>Generar Vista Previa
                         </button>
                     </div>
@@ -502,13 +379,13 @@ function getCalificacionesAlumno($alumno_id, $grado, $grupo, $mes) {
                 <div class="generator-card">
                     <h5 class="mb-3"><i class="fas fa-tools me-2"></i>Acciones</h5>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                        <button onclick="window.print()" class="btn btn-print btn-custom">
+                        <button onclick="window.print()" class="btn btn-secondary">
                             <i class="fas fa-print me-2"></i>Imprimir Boletas
                         </button>
-                        <button class="btn btn-download btn-custom" onclick="downloadPDF()">
+                        <button class="btn btn-primary" onclick="downloadPDF()">
                             <i class="fas fa-download me-2"></i>Descargar PDF
                         </button>
-                        <button class="btn btn-secondary btn-custom" onclick="window.location.reload()">
+                        <button class="btn btn-outline-secondary" onclick="window.location.reload()">
                             <i class="fas fa-redo me-2"></i>Nueva Búsqueda
                         </button>
                     </div>
@@ -573,6 +450,36 @@ function getCalificacionesAlumno($alumno_id, $grado, $grupo, $mes) {
                 event.target.disabled = false;
             });
         }
+    </script>
+    
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" id="darkModeToggle" title="Cambiar modo">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const body = document.body;
+            
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                body.setAttribute('data-theme', 'dark');
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            darkModeToggle.addEventListener('click', function() {
+                if (body.getAttribute('data-theme') === 'dark') {
+                    body.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                    darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                } else {
+                    body.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                }
+            });
+        });
     </script>
 </body>
 </html>

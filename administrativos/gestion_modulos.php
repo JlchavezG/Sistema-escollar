@@ -154,261 +154,14 @@ $modulos_en_uso = $db->single()['total'];
     <title>Gestión de Módulos - <?php echo APP_NAME; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <style>
-        :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-        }
-        
-        body {
-            background: #f5f7fa;
-        }
-        
-        .sidebar {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            min-height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 280px;
-            z-index: 1000;
-        }
-        
-        .sidebar-header {
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .sidebar-header h3 {
-            color: white;
-            margin: 10px 0;
-            font-weight: 600;
-        }
-        
-        .sidebar-menu {
-            padding: 20px 0;
-        }
-        
-        .sidebar-menu .nav-item {
-            margin-bottom: 5px;
-        }
-        
-        .sidebar-menu .nav-link {
-            color: rgba(255,255,255,0.8);
-            padding: 12px 20px;
-            border-radius: 0 25px 25px 0;
-            margin-right: 10px;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-        
-        .sidebar-menu .nav-link.active {
-            color: white;
-            background: rgba(255,255,255,0.15);
-            margin-right: 0;
-        }
-        
-        .sidebar-menu .nav-link:hover:not(.active) {
-            color: white;
-            background: rgba(255,255,255,0.1);
-            margin-right: 0;
-        }
-        
-        .sidebar-menu .nav-link i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-        
-        .main-content {
-            margin-left: 280px;
-        }
-        
-        .navbar {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .page-header {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .modulo-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-            transition: all 0.3s;
-            border-left: 4px solid var(--primary-color);
-        }
-        
-        .modulo-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        
-        .stat-item {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-            text-align: center;
-            transition: all 0.3s;
-        }
-        
-        .stat-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
-        }
-        
-        .stat-number {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin: 10px 0;
-        }
-        
-        .stat-label {
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .clave-badge {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 14px;
-            display: inline-block;
-        }
-        
-        .badge-en-uso {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-        }
-        
-        .modal-content {
-            border-radius: 15px;
-            border: none;
-        }
-        
-        .modal-header {
-            border-radius: 15px 15px 0 0 !important;
-            padding: 25px;
-        }
-        
-        .btn-custom {
-            border-radius: 10px;
-            padding: 10px 20px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .quick-actions {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        
-        .btn-example {
-            background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
-            border: none;
-            color: white;
-            padding: 15px;
-            border-radius: 15px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-        
-        .btn-example:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(246, 173, 85, 0.4);
-        }
-        
-        .btn-example i {
-            font-size: 24px;
-            margin-right: 10px;
-        }
-        
-        .examples-modal {
-            background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
-        }
-        
-        .examples-list {
-            max-height: 300px;
-            overflow-y: auto;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin-top: 15px;
-        }
-        
-        .examples-list ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        
-        .examples-list li {
-            padding: 8px 0;
-            border-bottom: 1px solid #e9ecef;
-            display: flex;
-            justify-content: space-between;
-        }
-        
-        .examples-list li:last-child {
-            border-bottom: none;
-        }
-        
-        .examples-list .clave {
-            font-weight: 600;
-            color: var(--primary-color);
-            min-width: 60px;
-        }
-        
-        .examples-list .nombre {
-            color: #495057;
-        }
-        
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 220px;
-            }
-            .main-content {
-                margin-left: 220px;
-            }
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .quick-actions {
-                flex-direction: column;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../assets/css/main.css">
 </head>
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-header">
             <div class="logo mb-3">
-                <i class="fas fa-graduation-cap fa-3x"></i>
+                <i class="fas fa-graduation-cap fa-2x"></i>
             </div>
             <h3><?php echo APP_NAME; ?></h3>
             <p class="text-white-50 small">Admin Panel</p>
@@ -512,7 +265,7 @@ $modulos_en_uso = $db->single()['total'];
                 <div class="row align-items-center">
                     <div class="col-md-8">
                         <h2 class="mb-0">
-                            <i class="fas fa-book-open me-3" style="color: var(--primary-color);"></i>
+                            <i class="fas fa-book-open me-3"></i>
                             Gestión de Módulos/Materias
                         </h2>
                         <p class="text-muted mb-0 mt-2">
@@ -522,10 +275,10 @@ $modulos_en_uso = $db->single()['total'];
                     </div>
                     <div class="col-md-4 text-md-end mt-3 mt-md-0">
                         <div class="d-flex gap-2 justify-content-md-end">
-                            <button type="button" class="btn btn-warning btn-custom" data-bs-toggle="modal" data-bs-target="#examplesModal">
+                            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#examplesModal">
                                 <i class="fas fa-magic me-2"></i>Módulos Ejemplo
                             </button>
-                            <button type="button" class="btn btn-primary btn-custom" data-bs-toggle="modal" data-bs-target="#moduloModal">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#moduloModal">
                                 <i class="fas fa-plus me-2"></i>Nuevo Módulo
                             </button>
                         </div>
@@ -568,8 +321,8 @@ $modulos_en_uso = $db->single()['total'];
             <?php endif; ?>
             
             <!-- Modulos List -->
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0 py-3">
+            <div class="card">
+                <div class="card-header">
                     <h5 class="mb-0"><i class="fas fa-list me-2"></i>Lista de Módulos</h5>
                 </div>
                 <div class="card-body p-0">
@@ -589,10 +342,10 @@ $modulos_en_uso = $db->single()['total'];
                                 <?php if (count($modulos) > 0): ?>
                                     <?php $contador = 1; ?>
                                     <?php foreach ($modulos as $modulo): ?>
-                                        <tr class="modulo-card">
+                                        <tr>
                                             <td><?php echo $contador++; ?></td>
                                             <td>
-                                                <span class="clave-badge"><?php echo htmlspecialchars($modulo['clave']); ?></span>
+                                                <span class="badge bg-primary"><?php echo htmlspecialchars($modulo['clave']); ?></span>
                                             </td>
                                             <td>
                                                 <strong><?php echo htmlspecialchars($modulo['nombre']); ?></strong>
@@ -652,7 +405,7 @@ $modulos_en_uso = $db->single()['total'];
                     <input type="hidden" name="action" id="modal_action" value="create">
                     <input type="hidden" name="id" id="modulo_id">
                     
-                    <div class="modal-header bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div class="modal-header gradient-primary">
                         <h5 class="modal-title text-white" id="modal_title">
                             <i class="fas fa-book-open me-2"></i>Crear Nuevo Módulo
                         </h5>
@@ -703,7 +456,7 @@ $modulos_en_uso = $db->single()['total'];
                 <form method="POST" action="">
                     <input type="hidden" name="action" value="create_examples">
                     
-                    <div class="modal-header examples-modal">
+                    <div class="modal-header gradient-accent">
                         <h5 class="modal-title text-white">
                             <i class="fas fa-magic me-2"></i>Crear Módulos de Ejemplo
                         </h5>
@@ -719,28 +472,28 @@ $modulos_en_uso = $db->single()['total'];
                         
                         <h5 class="mb-3">Módulos que se crearán:</h5>
                         
-                        <div class="examples-list">
-                            <ul>
-                                <li><span class="clave">MAT</span> <span class="nombre">Matemáticas</span></li>
-                                <li><span class="clave">ESP</span> <span class="nombre">Español</span></li>
-                                <li><span class="clave">HIS</span> <span class="nombre">Historia</span></li>
-                                <li><span class="clave">GEO</span> <span class="nombre">Geografía</span></li>
-                                <li><span class="clave">CNA</span> <span class="nombre">Ciencias Naturales</span></li>
-                                <li><span class="clave">FIS</span> <span class="nombre">Física</span></li>
-                                <li><span class="clave">QUI</span> <span class="nombre">Química</span></li>
-                                <li><span class="clave">BIO</span> <span class="nombre">Biología</span></li>
-                                <li><span class="clave">ING</span> <span class="nombre">Inglés</span></li>
-                                <li><span class="clave">EDF</span> <span class="nombre">Educación Física</span></li>
-                                <li><span class="clave">ARV</span> <span class="nombre">Artes Visuales</span></li>
-                                <li><span class="clave">MUS</span> <span class="nombre">Música</span></li>
-                                <li><span class="clave">TEC</span> <span class="nombre">Tecnología</span></li>
-                                <li><span class="clave">FCE</span> <span class="nombre">Formación Cívica y Ética</span></li>
-                                <li><span class="clave">PRO</span> <span class="nombre">Programación</span></li>
-                                <li><span class="clave">ROB</span> <span class="nombre">Robótica</span></li>
-                                <li><span class="clave">LIT</span> <span class="nombre">Literatura</span></li>
-                                <li><span class="clave">ALG</span> <span class="nombre">Álgebra</span></li>
-                                <li><span class="clave">CAL</span> <span class="nombre">Cálculo</span></li>
-                                <li><span class="clave">EST</span> <span class="nombre">Estadística</span></li>
+                        <div style="max-height: 300px; overflow-y: auto; background: var(--color-gray-light); padding: var(--spacing-md); border-radius: var(--border-radius-md); margin-top: var(--spacing-md);">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2"><strong>MAT</strong> - Matemáticas</li>
+                                <li class="mb-2"><strong>ESP</strong> - Español</li>
+                                <li class="mb-2"><strong>HIS</strong> - Historia</li>
+                                <li class="mb-2"><strong>GEO</strong> - Geografía</li>
+                                <li class="mb-2"><strong>CNA</strong> - Ciencias Naturales</li>
+                                <li class="mb-2"><strong>FIS</strong> - Física</li>
+                                <li class="mb-2"><strong>QUI</strong> - Química</li>
+                                <li class="mb-2"><strong>BIO</strong> - Biología</li>
+                                <li class="mb-2"><strong>ING</strong> - Inglés</li>
+                                <li class="mb-2"><strong>EDF</strong> - Educación Física</li>
+                                <li class="mb-2"><strong>ARV</strong> - Artes Visuales</li>
+                                <li class="mb-2"><strong>MUS</strong> - Música</li>
+                                <li class="mb-2"><strong>TEC</strong> - Tecnología</li>
+                                <li class="mb-2"><strong>FCE</strong> - Formación Cívica y Ética</li>
+                                <li class="mb-2"><strong>PRO</strong> - Programación</li>
+                                <li class="mb-2"><strong>ROB</strong> - Robótica</li>
+                                <li class="mb-2"><strong>LIT</strong> - Literatura</li>
+                                <li class="mb-2"><strong>ALG</strong> - Álgebra</li>
+                                <li class="mb-2"><strong>CAL</strong> - Cálculo</li>
+                                <li class="mb-2"><strong>EST</strong> - Estadística</li>
                             </ul>
                         </div>
                         
@@ -815,6 +568,36 @@ $modulos_en_uso = $db->single()['total'];
         // Auto-uppercase for clave field
         document.getElementById('clave').addEventListener('input', function() {
             this.value = this.value.toUpperCase();
+        });
+    </script>
+    
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" id="darkModeToggle" title="Cambiar modo">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const body = document.body;
+            
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                body.setAttribute('data-theme', 'dark');
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            darkModeToggle.addEventListener('click', function() {
+                if (body.getAttribute('data-theme') === 'dark') {
+                    body.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                    darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                } else {
+                    body.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                }
+            });
         });
     </script>
 </body>

@@ -109,185 +109,14 @@ $modulos_asignados = $db->single()['total'];
     <title>Asignar Módulos - <?php echo APP_NAME; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <style>
-        :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-        }
-        
-        body {
-            background: #f5f7fa;
-        }
-        
-        .sidebar {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            min-height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 280px;
-            z-index: 1000;
-        }
-        
-        .sidebar-header {
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .sidebar-header h3 {
-            color: white;
-            margin: 10px 0;
-            font-weight: 600;
-        }
-        
-        .sidebar-menu {
-            padding: 20px 0;
-        }
-        
-        .sidebar-menu .nav-item {
-            margin-bottom: 5px;
-        }
-        
-        .sidebar-menu .nav-link {
-            color: rgba(255,255,255,0.8);
-            padding: 12px 20px;
-            border-radius: 0 25px 25px 0;
-            margin-right: 10px;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-        
-        .sidebar-menu .nav-link.active {
-            color: white;
-            background: rgba(255,255,255,0.15);
-            margin-right: 0;
-        }
-        
-        .sidebar-menu .nav-link:hover:not(.active) {
-            color: white;
-            background: rgba(255,255,255,0.1);
-            margin-right: 0;
-        }
-        
-        .sidebar-menu .nav-link i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-        
-        .main-content {
-            margin-left: 280px;
-        }
-        
-        .navbar {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .page-header {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .assignment-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-            transition: all 0.3s;
-            border-left: 4px solid var(--primary-color);
-        }
-        
-        .assignment-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        
-        .stat-item {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-            text-align: center;
-            transition: all 0.3s;
-        }
-        
-        .stat-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
-        }
-        
-        .stat-number {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin: 10px 0;
-        }
-        
-        .stat-label {
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .grade-group-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 600;
-            margin: 5px;
-        }
-        
-        .modal-content {
-            border-radius: 15px;
-            border: none;
-        }
-        
-        .modal-header {
-            border-radius: 15px 15px 0 0 !important;
-            padding: 25px;
-        }
-        
-        .btn-custom {
-            border-radius: 10px;
-            padding: 10px 20px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 220px;
-            }
-            .main-content {
-                margin-left: 220px;
-            }
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../assets/css/main.css">
 </head>
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-header">
             <div class="logo mb-3">
-                <i class="fas fa-graduation-cap fa-3x"></i>
+                <i class="fas fa-graduation-cap fa-2x"></i>
             </div>
             <h3><?php echo APP_NAME; ?></h3>
             <p class="text-white-50 small">Admin Panel</p>
@@ -391,7 +220,7 @@ $modulos_asignados = $db->single()['total'];
                 <div class="row align-items-center">
                     <div class="col-md-8">
                         <h2 class="mb-0">
-                            <i class="fas fa-book me-3" style="color: var(--primary-color);"></i>
+                            <i class="fas fa-book me-3"></i>
                             Asignación de Módulos
                         </h2>
                         <p class="text-muted mb-0 mt-2">
@@ -400,7 +229,7 @@ $modulos_asignados = $db->single()['total'];
                         </p>
                     </div>
                     <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                        <button type="button" class="btn btn-primary btn-custom" data-bs-toggle="modal" data-bs-target="#asignacionModal">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#asignacionModal">
                             <i class="fas fa-plus me-2"></i>Nueva Asignación
                         </button>
                     </div>
@@ -429,8 +258,8 @@ $modulos_asignados = $db->single()['total'];
             </div>
             
             <!-- Assignments List -->
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0 py-3">
+            <div class="card">
+                <div class="card-header">
                     <h5 class="mb-0"><i class="fas fa-list me-2"></i>Lista de Asignaciones</h5>
                 </div>
                 <div class="card-body p-0">
@@ -450,7 +279,7 @@ $modulos_asignados = $db->single()['total'];
                                 <?php if (count($asignaciones) > 0): ?>
                                     <?php $contador = 1; ?>
                                     <?php foreach ($asignaciones as $asignacion): ?>
-                                        <tr class="assignment-card">
+                                        <tr>
                                             <td><?php echo $contador++; ?></td>
                                             <td>
                                                 <strong><?php echo htmlspecialchars($asignacion['profesor_ap'] . ' ' . $asignacion['profesor_am']); ?></strong><br>
@@ -461,7 +290,7 @@ $modulos_asignados = $db->single()['total'];
                                                 <small class="text-muted"><?php echo htmlspecialchars($asignacion['modulo_nombre']); ?></small>
                                             </td>
                                             <td>
-                                                <span class="grade-group-badge">
+                                                <span class="badge bg-primary">
                                                     <?php echo htmlspecialchars($asignacion['grado']); ?> - <?php echo htmlspecialchars($asignacion['grupo']); ?>
                                                 </span>
                                             </td>
@@ -512,7 +341,7 @@ $modulos_asignados = $db->single()['total'];
                     <input type="hidden" name="action" id="modal_action" value="create">
                     <input type="hidden" name="id" id="asignacion_id">
                     
-                    <div class="modal-header bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div class="modal-header gradient-primary">
                         <h5 class="modal-title text-white" id="modal_title">
                             <i class="fas fa-book me-2"></i>Nueva Asignación de Módulo
                         </h5>
@@ -636,6 +465,36 @@ $modulos_asignados = $db->single()['total'];
                 form.submit();
             }
         }
+    </script>
+    
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" id="darkModeToggle" title="Cambiar modo">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const body = document.body;
+            
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                body.setAttribute('data-theme', 'dark');
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            darkModeToggle.addEventListener('click', function() {
+                if (body.getAttribute('data-theme') === 'dark') {
+                    body.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                    darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                } else {
+                    body.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                }
+            });
+        });
     </script>
 </body>
 </html>

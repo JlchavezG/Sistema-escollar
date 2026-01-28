@@ -80,154 +80,28 @@ function safeValue($value, $default = 0) {
     <title>Reportes - <?php echo APP_NAME; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-        }
-        
-        body {
-            background: #f5f7fa;
-        }
-        
-        .sidebar {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            min-height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 280px;
-            z-index: 1000;
-        }
-        
-        .sidebar-header {
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .sidebar-header h3 {
-            color: white;
-            margin: 10px 0;
-            font-weight: 600;
-        }
-        
-        .sidebar-menu {
-            padding: 20px 0;
-        }
-        
-        .sidebar-menu .nav-item {
-            margin-bottom: 5px;
-        }
-        
-        .sidebar-menu .nav-link {
-            color: rgba(255,255,255,0.8);
-            padding: 12px 20px;
-            border-radius: 0 25px 25px 0;
-            margin-right: 10px;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-        
-        .sidebar-menu .nav-link.active {
-            color: white;
-            background: rgba(255,255,255,0.15);
-            margin-right: 0;
-        }
-        
-        .sidebar-menu .nav-link:hover:not(.active) {
-            color: white;
-            background: rgba(255,255,255,0.1);
-            margin-right: 0;
-        }
-        
-        .sidebar-menu .nav-link i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-        
-        .main-content {
-            margin-left: 280px;
-        }
-        
-        .navbar {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .page-header {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
         .report-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: var(--color-white);
+            border-radius: var(--border-radius-xl);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
         }
         
         .chart-container {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .stat-item {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin: 10px 0;
-        }
-        
-        .stat-label {
-            font-size: 14px;
-            color: #666;
-            font-weight: 500;
+            background: var(--color-white);
+            border-radius: var(--border-radius-xl);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
         }
         
         .table-container {
             max-height: 400px;
             overflow-y: auto;
-        }
-        
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 220px;
-            }
-            .main-content {
-                margin-left: 220px;
-            }
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .table-container {
-                max-height: 300px;
-            }
         }
     </style>
 </head>
@@ -236,7 +110,7 @@ function safeValue($value, $default = 0) {
     <div class="sidebar">
         <div class="sidebar-header">
             <div class="logo mb-3">
-                <i class="fas fa-graduation-cap fa-3x"></i>
+                <i class="fas fa-graduation-cap fa-2x"></i>
             </div>
             <h3><?php echo APP_NAME; ?></h3>
             <p class="text-white-50 small">Admin Panel</p>
@@ -331,7 +205,7 @@ function safeValue($value, $default = 0) {
                 <div class="row align-items-center">
                     <div class="col-md-8">
                         <h2 class="mb-0">
-                            <i class="fas fa-chart-bar me-3" style="color: var(--primary-color);"></i>
+                            <i class="fas fa-chart-bar me-3"></i>
                             Reportes y Estadísticas
                         </h2>
                         <p class="text-muted mb-0 mt-2">
@@ -578,8 +452,8 @@ function safeValue($value, $default = 0) {
                 datasets: [{
                      <?php echo json_encode(array_map(function($v) { return $v ?: 0; }, array_column($reporte_modulos, 'total_calificaciones'))); ?>,
                     backgroundColor: [
-                        '#667eea', '#764ba2', '#f6ad55', '#ed8936', '#48bb78',
-                        '#38a169', '#3182ce', '#2b6cb0', '#9f7aea', '#805ad5'
+                        '#3498db', '#2c3e50', '#f39c12', '#e74c3c', '#27ae60',
+                        '#16a085', '#8e44ad', '#2980b9', '#d35400', '#c0392b'
                     ]
                 }]
             },
@@ -603,8 +477,8 @@ function safeValue($value, $default = 0) {
                 datasets: [{
                     label: 'Calificaciones Registradas',
                      <?php echo json_encode(array_map(function($v) { return $v ?: 0; }, array_column($reporte_meses, 'total_calificaciones'))); ?>,
-                    backgroundColor: 'rgba(102, 126, 234, 0.7)',
-                    borderColor: 'rgba(102, 126, 234, 1)',
+                    backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                    borderColor: 'rgba(52, 152, 219, 1)',
                     borderWidth: 2,
                     borderRadius: 8
                 }]
@@ -634,9 +508,9 @@ function safeValue($value, $default = 0) {
                 datasets: [{
                      <?php echo json_encode(array_map(function($v) { return $v ?: 0; }, array_column($reporte_grados, 'total_calificaciones'))); ?>,
                     backgroundColor: [
-                        '#667eea', '#764ba2', '#f6ad55', '#ed8936', '#48bb78',
-                        '#38a169', '#3182ce', '#2b6cb0', '#9f7aea', '#805ad5',
-                        '#fc8181', '#e53e3e', '#feebc8', '#dd6b20', '#c6f6d5'
+                        '#3498db', '#2c3e50', '#f39c12', '#e74c3c', '#27ae60',
+                        '#16a085', '#8e44ad', '#2980b9', '#d35400', '#c0392b',
+                        '#2ecc71', '#3498db', '#9b59b6', '#34495e', '#1abc9c'
                     ]
                 }]
             },
@@ -660,10 +534,10 @@ function safeValue($value, $default = 0) {
                 datasets: [{
                     label: 'Promedio de Calificaciones',
                      <?php echo json_encode(array_map(function($v) { return $v !== null ? parseFloat($v) : 0; }, array_column($reporte_grados, 'promedio'))); ?>,
-                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                    borderColor: 'rgba(102, 126, 234, 1)',
+                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                    borderColor: 'rgba(52, 152, 219, 1)',
                     borderWidth: 3,
-                    pointBackgroundColor: 'rgba(102, 126, 234, 1)',
+                    pointBackgroundColor: 'rgba(52, 152, 219, 1)',
                     pointRadius: 5,
                     fill: true,
                     tension: 0.3
@@ -723,6 +597,36 @@ function safeValue($value, $default = 0) {
             downloadLink.click();
             document.body.removeChild(downloadLink);
         }
+    </script>
+    
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" id="darkModeToggle" title="Cambiar modo">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const body = document.body;
+            
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                body.setAttribute('data-theme', 'dark');
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            darkModeToggle.addEventListener('click', function() {
+                if (body.getAttribute('data-theme') === 'dark') {
+                    body.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                    darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                } else {
+                    body.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                }
+            });
+        });
     </script>
 </body>
 </html>

@@ -47,217 +47,15 @@ foreach ($meses as $mes) {
     <title>Dashboard Administrativo - <?php echo APP_NAME; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-            --success-color: #48bb78;
-            --info-color: #3182ce;
-            --warning-color: #f6ad55;
-            --danger-color: #f56565;
-        }
-        
-        body {
-            background: #f5f7fa;
-        }
-        
-        .sidebar {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            min-height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 280px;
-            transition: all 0.3s;
-            z-index: 1000;
-        }
-        
-        .sidebar-header {
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .sidebar-header h3 {
-            color: white;
-            margin: 10px 0;
-            font-weight: 600;
-        }
-        
-        .sidebar-menu {
-            padding: 20px 0;
-        }
-        
-        .sidebar-menu .nav-item {
-            margin-bottom: 5px;
-        }
-        
-        .sidebar-menu .nav-link {
-            color: rgba(255,255,255,0.8);
-            padding: 12px 20px;
-            border-radius: 0 25px 25px 0;
-            margin-right: 10px;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-        
-        .sidebar-menu .nav-link.active {
-            color: white;
-            background: rgba(255,255,255,0.15);
-            margin-right: 0;
-        }
-        
-        .sidebar-menu .nav-link:hover:not(.active) {
-            color: white;
-            background: rgba(255,255,255,0.1);
-            margin-right: 0;
-        }
-        
-        .sidebar-menu .nav-link i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-        
-        .main-content {
-            margin-left: 280px;
-            transition: all 0.3s;
-        }
-        
-        .navbar {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .stats-card {
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-            border: none;
-            padding: 20px;
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .stats-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-        
-        .stats-card .card-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .stats-card .card-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #666;
-            margin-bottom: 5px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .stats-card .card-value {
-            font-size: 28px;
-            font-weight: 700;
-            color: #333;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .btn-action {
-            padding: 20px;
-            border-radius: 15px;
-            font-weight: 600;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            text-decoration: none;
-            color: white;
-            text-align: center;
-            border: none;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        
-        .btn-action i {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-        
-        .btn-action:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
-        }
-        
-        .recent-list {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .recent-list .list-group-item {
-            border-radius: 10px !important;
-            margin-bottom: 8px;
-            border: 1px solid #e9ecef;
-            padding: 12px 15px;
-        }
-        
-        .recent-list .list-group-item:last-child {
-            margin-bottom: 0;
-        }
-        
-        .chart-container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 220px;
-            }
-            .main-content {
-                margin-left: 220px;
-            }
-            .stats-card {
-                margin-bottom: 15px;
-            }
-            .quick-actions {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
 </head>
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-header">
             <div class="logo mb-3">
-                <i class="fas fa-graduation-cap fa-3x"></i>
+                <i class="fas fa-graduation-cap fa-2x"></i>
             </div>
             <h3><?php echo APP_NAME; ?></h3>
             <p class="text-white-50 small">Admin Panel</p>
@@ -278,6 +76,11 @@ foreach ($meses as $mes) {
                 <li class="nav-item">
                     <a class="nav-link" href="gestion_alumnos.php">
                         <i class="fas fa-user-graduate"></i> Gestión de Alumnos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="gestion_modulos.php">
+                        <i class="fas fa-book-open"></i> Gestión de Módulos
                     </a>
                 </li>
                 <li class="nav-item">
@@ -352,7 +155,7 @@ foreach ($meses as $mes) {
             <!-- Statistics Cards -->
             <div class="row mb-4">
                 <div class="col-md-3 col-sm-6">
-                    <div class="card stats-card border-0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div class="card stats-card border-0 gradient-primary">
                         <div class="card-icon bg-white text-primary">
                             <i class="fas fa-user-graduate fa-2x"></i>
                         </div>
@@ -364,8 +167,8 @@ foreach ($meses as $mes) {
                 </div>
                 
                 <div class="col-md-3 col-sm-6">
-                    <div class="card stats-card border-0" style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);">
-                        <div class="card-icon bg-white text-success">
+                    <div class="card stats-card border-0 gradient-info">
+                        <div class="card-icon bg-white text-info">
                             <i class="fas fa-chalkboard-teacher fa-2x"></i>
                         </div>
                         <div class="card-body p-0">
@@ -376,8 +179,8 @@ foreach ($meses as $mes) {
                 </div>
                 
                 <div class="col-md-3 col-sm-6">
-                    <div class="card stats-card border-0" style="background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);">
-                        <div class="card-icon bg-white text-info">
+                    <div class="card stats-card border-0 gradient-secondary">
+                        <div class="card-icon bg-white text-secondary">
                             <i class="fas fa-user-tie fa-2x"></i>
                         </div>
                         <div class="card-body p-0">
@@ -388,8 +191,8 @@ foreach ($meses as $mes) {
                 </div>
                 
                 <div class="col-md-3 col-sm-6">
-                    <div class="card stats-card border-0" style="background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);">
-                        <div class="card-icon bg-white text-warning">
+                    <div class="card stats-card border-0 gradient-accent">
+                        <div class="card-icon bg-white text-accent">
                             <i class="fas fa-book-open fa-2x"></i>
                         </div>
                         <div class="card-body p-0">
@@ -403,25 +206,25 @@ foreach ($meses as $mes) {
             <!-- Quick Actions -->
             <div class="row mb-4">
                 <div class="col-12">
-                    <div class="card recent-list">
-                        <div class="card-header bg-white border-0">
+                    <div class="card">
+                        <div class="card-header">
                             <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Acciones Rápidas</h5>
                         </div>
                         <div class="card-body">
                             <div class="quick-actions">
-                                <a href="gestion_alumnos.php" class="btn-action" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <a href="gestion_alumnos.php" class="btn-action gradient-primary">
                                     <i class="fas fa-user-plus"></i>
                                     <span>Registrar Alumno</span>
                                 </a>
-                                <a href="gestion_usuarios.php" class="btn-action" style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);">
+                                <a href="gestion_usuarios.php" class="btn-action gradient-info">
                                     <i class="fas fa-user-plus"></i>
                                     <span>Registrar Profesor</span>
                                 </a>
-                                <a href="asignar_modulos.php" class="btn-action" style="background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);">
+                                <a href="asignar_modulos.php" class="btn-action gradient-secondary">
                                     <i class="fas fa-book"></i>
                                     <span>Asignar Módulos</span>
                                 </a>
-                                <a href="generar_boletas.php" class="btn-action" style="background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);">
+                                <a href="generar_boletas.php" class="btn-action gradient-accent">
                                     <i class="fas fa-file-pdf"></i>
                                     <span>Generar Boletas</span>
                                 </a>
@@ -434,15 +237,19 @@ foreach ($meses as $mes) {
             <!-- Charts and Recent Activity -->
             <div class="row mb-4">
                 <div class="col-lg-8">
-                    <div class="chart-container">
-                        <h5 class="mb-4"><i class="fas fa-chart-bar me-2"></i>Calificaciones por Mes</h5>
-                        <canvas id="calificacionesChart" height="200"></canvas>
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Calificaciones por Mes</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="calificacionesChart" height="200"></canvas>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="col-lg-4">
-                    <div class="recent-list">
-                        <div class="card-header bg-white border-0">
+                    <div class="card">
+                        <div class="card-header">
                             <h5 class="mb-0"><i class="fas fa-user-graduate me-2"></i>Últimos Alumnos</h5>
                         </div>
                         <ul class="list-group list-group-flush">
@@ -470,8 +277,8 @@ foreach ($meses as $mes) {
             
             <div class="row">
                 <div class="col-lg-4">
-                    <div class="recent-list">
-                        <div class="card-header bg-white border-0">
+                    <div class="card">
+                        <div class="card-header">
                             <h5 class="mb-0"><i class="fas fa-chalkboard-teacher me-2"></i>Últimos Profesores</h5>
                         </div>
                         <ul class="list-group list-group-flush">
@@ -483,7 +290,7 @@ foreach ($meses as $mes) {
                                                 <strong><?php echo htmlspecialchars($profesor['apellido_paterno']); ?></strong>
                                                 <small class="d-block text-muted"><?php echo htmlspecialchars($profesor['nombre']); ?></small>
                                             </div>
-                                            <span class="badge bg-success">Profesor</span>
+                                            <span class="badge bg-info">Profesor</span>
                                         </div>
                                     </li>
                                 <?php endforeach; ?>
@@ -497,8 +304,8 @@ foreach ($meses as $mes) {
                 </div>
                 
                 <div class="col-lg-8">
-                    <div class="recent-list">
-                        <div class="card-header bg-white border-0">
+                    <div class="card">
+                        <div class="card-header">
                             <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Información del Sistema</h5>
                         </div>
                         <div class="card-body">
@@ -530,18 +337,17 @@ foreach ($meses as $mes) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <script>
-        // Chart.js para calificaciones por mes
         document.addEventListener('DOMContentLoaded', function() {
             const ctx = document.getElementById('calificacionesChart').getContext('2d');
             const calificacionesChart = new Chart(ctx, {
                 type: 'bar',
-                data: {
+                 {
                     labels: <?php echo json_encode(array_keys($meses_calificaciones)); ?>,
                     datasets: [{
                         label: 'Calificaciones Registradas',
-                        data: <?php echo json_encode(array_values($meses_calificaciones)); ?>,
-                        backgroundColor: 'rgba(102, 126, 234, 0.7)',
-                        borderColor: 'rgba(102, 126, 234, 1)',
+                         <?php echo json_encode(array_values($meses_calificaciones)); ?>,
+                        backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
                         borderWidth: 2,
                         borderRadius: 8,
                         borderSkipped: false
@@ -568,6 +374,36 @@ foreach ($meses as $mes) {
                             }
                         }
                     }
+                }
+            });
+        });
+    </script>
+    
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" id="darkModeToggle" title="Cambiar modo">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const body = document.body;
+            
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                body.setAttribute('data-theme', 'dark');
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            darkModeToggle.addEventListener('click', function() {
+                if (body.getAttribute('data-theme') === 'dark') {
+                    body.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                    darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                } else {
+                    body.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
                 }
             });
         });
