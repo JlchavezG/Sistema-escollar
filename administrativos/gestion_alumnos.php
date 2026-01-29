@@ -11,7 +11,7 @@ $message_type = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['action'])) {
         $action = $_POST['action'];
-
+        
         if ($action == 'create' || $action == 'update') {
             $nombre = sanitizeInput($_POST['nombre']);
             $apellido_paterno = sanitizeInput($_POST['apellido_paterno']);
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $grupo = sanitizeInput($_POST['grupo']);
             $tutor_nombre = sanitizeInput($_POST['tutor_nombre']);
             $tutor_telefono = sanitizeInput($_POST['tutor_telefono']);
-
+            
             try {
                 if ($action == 'create') {
                     $db->query("INSERT INTO alumnos (nombre, apellido_paterno, apellido_materno, fecha_nacimiento, grado, grupo, tutor_nombre, tutor_telefono, created_at) 
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 WHERE id = :id");
                     $db->bind(':id', $id);
                 }
-
+                
                 $db->bind(':nombre', $nombre);
                 $db->bind(':apellido_paterno', $apellido_paterno);
                 $db->bind(':apellido_materno', $apellido_materno);
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $db->bind(':grupo', $grupo);
                 $db->bind(':tutor_nombre', $tutor_nombre);
                 $db->bind(':tutor_telefono', $tutor_telefono);
-
+                
                 if ($db->execute()) {
                     $message = $action == 'create' ? 'Alumno registrado exitosamente' : 'Alumno actualizado exitosamente';
                     $message_type = 'success';
@@ -54,10 +54,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         } elseif ($action == 'delete') {
             $id = intval($_POST['id']);
-
+            
             $db->query("DELETE FROM alumnos WHERE id = :id");
             $db->bind(':id', $id);
-
+            
             if ($db->execute()) {
                 $message = 'Alumno eliminado exitosamente';
                 $message_type = 'success';
@@ -88,7 +88,6 @@ $stats_grupos = $db->resultSet();
 ?>
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -97,10 +96,10 @@ $stats_grupos = $db->resultSet();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/main.css">
 </head>
-
 <body>
     <!-- Sidebar -->
     <?php include 'sidebarAdmin.php'; ?>
+    
     <!-- Main Content -->
     <div class="main-content">
         <!-- Navbar -->
@@ -112,31 +111,29 @@ $stats_grupos = $db->resultSet();
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" 
+                               data-bs-toggle="dropdown">
                                 <i class="fas fa-user-circle me-2"></i>
                                 <?php echo $_SESSION['user_name']; ?>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">
-                                        <i class="fas fa-cog me-2"></i> Configuración
-                                    </a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
+                                <li><a class="dropdown-item" href="perfil.php">
+                                    <i class="fas fa-user me-2"></i> Mi Perfil
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="../logout.php">
-                                        <i class="fas fa-sign-out-alt me-2"></i> Cerrar Sesión
-                                    </a></li>
+                                    <i class="fas fa-sign-out-alt me-2"></i> Cerrar Sesión
+                                </a></li>
                             </ul>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-
+        
         <!-- Page Content -->
         <div class="container-fluid p-4">
-            <!-- Mensajes -->
+            <!-- Mensajes CRUD -->
             <?php if ($message): ?>
                 <div class="alert alert-<?php echo $message_type; ?> alert-dismissible fade show" role="alert">
                     <i class="fas fa-<?php echo $message_type == 'success' ? 'check-circle' : ($message_type == 'danger' ? 'exclamation-triangle' : 'info-circle'); ?> me-2"></i>
@@ -144,7 +141,35 @@ $stats_grupos = $db->resultSet();
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             <?php endif; ?>
-
+            
+            <!-- Mensajes de Importación -->
+            <?php if (isset($_SESSION['import_message'])): ?>
+                <div class="alert alert-<?php echo $_SESSION['import_message_type']; ?> alert-dismissible fade show" role="alert">
+                    <i class="fas fa-<?php echo $_SESSION['import_message_type'] == 'success' ? 'check-circle' : ($_SESSION['import_message_type'] == 'danger' ? 'exclamation-triangle' : 'info-circle'); ?> me-2"></i>
+                    <?php echo $_SESSION['import_message']; ?>
+                    
+                    <?php if (isset($_SESSION['import_errors']) && count($_SESSION['import_errors']) > 0): ?>
+                        <div class="mt-3">
+                            <strong>Errores detectados:</strong>
+                            <ul class="mb-0 mt-2">
+                                <?php foreach ($_SESSION['import_errors'] as $error): ?>
+                                    <li><?php echo htmlspecialchars($error); ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <?php 
+                unset($_SESSION['import_message']);
+                unset($_SESSION['import_message_type']);
+                unset($_SESSION['import_success_count']);
+                unset($_SESSION['import_error_count']);
+                unset($_SESSION['import_errors']);
+                ?>
+            <?php endif; ?>
+            
             <!-- Page Header -->
             <div class="page-header mb-4">
                 <div class="row align-items-center">
@@ -158,18 +183,17 @@ $stats_grupos = $db->resultSet();
                             Registra y administra la información de los alumnos
                         </p>
                     </div>
-                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <div class="col-md-12 text-md-end mt-3 mt-md-0">
                         <div class="d-flex gap-2 justify-content-md-end">
-                            <!-- Botón Descargar Plantilla Excel -->
-                            <a href="descargar_plantilla_excel.php" class="btn btn-success" title="Descargar plantilla Excel">
-                                <i class="fas fa-file-excel me-1"></i>Genera Excel
+                            <!-- Botón Descargar Plantilla CSV -->
+                            <a href="descargar_plantilla_csv.php" class="btn btn-success" title="Descargar plantilla CSV">
+                                <i class="fas fa-file-csv me-1"></i>Plantilla CSV
                             </a>
-
-                            <!-- Botón Importar desde Excel (abre modal) -->
-                            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#importModal" title="Importar desde Excel">
-                                <i class="fas fa-upload me-1"></i>Importar Excel
+                            <!-- Botón Importar desde CSV (abre modal) -->
+                            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#importModal" title="Importar desde CSV">
+                                <i class="fas fa-upload me-1"></i>Importar CSV
                             </button>
-
+                            
                             <!-- Botón Nuevo Alumno -->
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#alumnoModal">
                                 <i class="fas fa-plus me-1"></i>Nuevo Alumno
@@ -178,68 +202,39 @@ $stats_grupos = $db->resultSet();
                     </div>
                 </div>
             </div>
+            
             <!-- Statistics -->
             <div class="stats-grid mb-4">
                 <?php
                 $db->query("SELECT COUNT(*) as total FROM alumnos");
                 $total_alumnos = $db->single()['total'];
-
+                
                 $db->query("SELECT COUNT(DISTINCT grado) as total FROM alumnos");
                 $total_grados = $db->single()['total'];
-
+                
                 $db->query("SELECT COUNT(DISTINCT CONCAT(grado, grupo)) as total FROM alumnos");
                 $total_grupos = $db->single()['total'];
                 ?>
-
+                
                 <div class="stat-item">
                     <i class="fas fa-user-graduate fa-2x text-primary"></i>
                     <div class="stat-number"><?php echo $total_alumnos; ?></div>
                     <div class="stat-label">Total Alumnos</div>
                 </div>
-
+                
                 <div class="stat-item">
                     <i class="fas fa-layer-group fa-2x text-secondary"></i>
                     <div class="stat-number"><?php echo $total_grados; ?></div>
                     <div class="stat-label">Grados</div>
                 </div>
-
+                
                 <div class="stat-item">
                     <i class="fas fa-users fa-2x text-info"></i>
                     <div class="stat-number"><?php echo $total_grupos; ?></div>
                     <div class="stat-label">Grupos</div>
                 </div>
             </div>
-<!-- Mensajes de Importación -->
-<?php if (isset($_SESSION['import_message'])): ?>
-    <div class="alert alert-<?php echo $_SESSION['import_message_type']; ?> alert-dismissible fade show" role="alert">
-        <i class="fas fa-<?php echo $_SESSION['import_message_type'] == 'success' ? 'check-circle' : ($_SESSION['import_message_type'] == 'danger' ? 'exclamation-triangle' : 'info-circle'); ?> me-2"></i>
-        <?php echo $_SESSION['import_message']; ?>
-        
-        <?php if (isset($_SESSION['import_errors']) && count($_SESSION['import_errors']) > 0): ?>
-            <div class="mt-3">
-                <strong>Errores detectados:</strong>
-                <ul class="mb-0 mt-2">
-                    <?php foreach ($_SESSION['import_errors'] as $error): ?>
-                        <li><?php echo htmlspecialchars($error); ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        <?php endif; ?>
-        
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    <?php 
-    unset($_SESSION['import_message']);
-    unset($_SESSION['import_message_type']);
-    unset($_SESSION['import_success_count']);
-    unset($_SESSION['import_error_count']);
-    unset($_SESSION['import_errors']);
-    ?>
-<?php endif; ?>
-
-
-
-
+            
             <!-- Alumnos List -->
             <div class="card">
                 <div class="card-header">
@@ -284,13 +279,13 @@ $stats_grupos = $db->resultSet();
                                             </td>
                                             <td>
                                                 <div class="d-flex gap-2">
-                                                    <button type="button" class="btn btn-sm btn-primary"
-                                                        data-bs-toggle="modal" data-bs-target="#alumnoModal"
-                                                        onclick='editAlumno(<?php echo json_encode($alumno); ?>)'>
+                                                    <button type="button" class="btn btn-sm btn-primary" 
+                                                            data-bs-toggle="modal" data-bs-target="#alumnoModal"
+                                                            onclick='editAlumno(<?php echo json_encode($alumno); ?>)'>
                                                         <i class="fas fa-edit"></i>
                                                     </button>
-                                                    <button type="button" class="btn btn-sm btn-danger"
-                                                        onclick='deleteAlumno(<?php echo $alumno['id']; ?>, "<?php echo htmlspecialchars($alumno['nombre']); ?>")'>
+                                                    <button type="button" class="btn btn-sm btn-danger" 
+                                                            onclick='deleteAlumno(<?php echo $alumno['id']; ?>, "<?php echo htmlspecialchars($alumno['nombre']); ?>")'>
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </div>
@@ -303,9 +298,14 @@ $stats_grupos = $db->resultSet();
                                             <div class="text-muted">
                                                 <i class="fas fa-user-graduate fa-3x mb-3"></i>
                                                 <p>No hay alumnos registrados</p>
-                                                <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#alumnoModal">
-                                                    <i class="fas fa-plus me-2"></i>Registrar Primer Alumno
-                                                </button>
+                                                <div class="d-flex justify-content-center gap-3 mt-3">
+                                                    <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#alumnoModal">
+                                                        <i class="fas fa-plus me-2"></i>Registrar Primer Alumno
+                                                    </button>
+                                                    <button type="button" class="btn btn-success mt-2" onclick="window.location.href='descargar_plantilla_csv.php'">
+                                                        <i class="fas fa-file-csv me-2"></i>Descargar Plantilla CSV
+                                                    </button>
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
@@ -317,7 +317,7 @@ $stats_grupos = $db->resultSet();
             </div>
         </div>
     </div>
-
+    
     <!-- Modal: Crear/Editar Alumno -->
     <div class="modal fade" id="alumnoModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
@@ -325,36 +325,36 @@ $stats_grupos = $db->resultSet();
                 <form method="POST" action="">
                     <input type="hidden" name="action" id="modal_action" value="create">
                     <input type="hidden" name="id" id="alumno_id">
-
+                    
                     <div class="modal-header gradient-primary">
                         <h5 class="modal-title text-white" id="modal_title">
                             <i class="fas fa-user-plus me-2"></i>Registrar Nuevo Alumno
                         </h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
-
+                    
                     <div class="modal-body p-4">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Nombre(s) <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="nombre" id="nombre" required>
                             </div>
-
+                            
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Apellido Paterno <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="apellido_paterno" id="apellido_paterno" required>
                             </div>
-
+                            
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Apellido Materno</label>
                                 <input type="text" class="form-control" name="apellido_materno" id="apellido_materno">
                             </div>
-
+                            
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Fecha de Nacimiento <span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" name="fecha_nacimiento" id="fecha_nacimiento" required>
                             </div>
-
+                            
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Grado <span class="text-danger">*</span></label>
                                 <select class="form-select" name="grado" id="grado" required>
@@ -364,7 +364,7 @@ $stats_grupos = $db->resultSet();
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-
+                            
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Grupo <span class="text-danger">*</span></label>
                                 <select class="form-select" name="grupo" id="grupo" required>
@@ -374,19 +374,19 @@ $stats_grupos = $db->resultSet();
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-
+                            
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Nombre del Tutor</label>
                                 <input type="text" class="form-control" name="tutor_nombre" id="tutor_nombre" placeholder="Nombre completo del tutor">
                             </div>
-
+                            
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Teléfono del Tutor</label>
                                 <input type="text" class="form-control" name="tutor_telefono" id="tutor_telefono" placeholder="555-1234">
                             </div>
                         </div>
                     </div>
-
+                    
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             <i class="fas fa-times me-2"></i>Cancelar
@@ -399,7 +399,68 @@ $stats_grupos = $db->resultSet();
             </div>
         </div>
     </div>
-
+    
+    <!-- Modal: Importar Alumnos desde CSV -->
+    <div class="modal fade" id="importModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="POST" action="importar_alumnos_csv.php" enctype="multipart/form-data">
+                    <div class="modal-header gradient-primary">
+                        <h5 class="modal-title text-white">
+                            <i class="fas fa-file-csv me-2"></i>Importar Alumnos desde CSV
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    
+                    <div class="modal-body p-4">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Instrucciones:</strong>
+                            <ol class="mb-0 mt-2">
+                                <li>Descarga la plantilla CSV con el botón correspondiente</li>
+                                <li>Llena los datos en Excel, Google Sheets o Numbers</li>
+                                <li>Guarda como CSV (Valores separados por comas)</li>
+                                <li>Sube el archivo CSV aquí</li>
+                                <li>Haz clic en "Importar Alumnos"</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-file-csv me-1 text-success"></i>Archivo CSV (.csv)
+                            </label>
+                            <input type="file" class="form-control" name="archivo_csv" accept=".csv" required>
+                            <small class="text-muted">
+                                <i class="fas fa-exclamation-triangle me-1"></i>
+                                Máximo 5MB. Solo archivos .csv
+                            </small>
+                        </div>
+                        
+                        <div class="alert alert-warning">
+                            <i class="fas fa-shield-alt me-2"></i>
+                            <strong>Formato requerido:</strong>
+                            <ul class="mb-0 mt-2">
+                                <li>Primera fila: Encabezados (NOMBRE, APELLIDO_PATERNO, etc.)</li>
+                                <li>Fecha: AAAA-MM-DD (ej: 2010-05-15)</li>
+                                <li>Separador: Coma (,)</li>
+                                <li>Codificación: UTF-8</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-1"></i>Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-cloud-upload-alt me-1"></i>Importar Alumnos
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <script>
@@ -408,7 +469,7 @@ $stats_grupos = $db->resultSet();
             document.getElementById('modal_title').innerHTML = '<i class="fas fa-user-edit me-2"></i>Editar Alumno';
             document.getElementById('modal_action').value = 'update';
             document.getElementById('btn_save_text').textContent = 'Actualizar Alumno';
-
+            
             document.getElementById('alumno_id').value = alumno.id;
             document.getElementById('nombre').value = alumno.nombre;
             document.getElementById('apellido_paterno').value = alumno.apellido_paterno;
@@ -419,7 +480,7 @@ $stats_grupos = $db->resultSet();
             document.getElementById('tutor_nombre').value = alumno.tutor_nombre;
             document.getElementById('tutor_telefono').value = alumno.tutor_telefono;
         }
-
+        
         // Reset modal on close
         document.getElementById('alumnoModal').addEventListener('hidden.bs.modal', function() {
             this.querySelector('form').reset();
@@ -428,24 +489,24 @@ $stats_grupos = $db->resultSet();
             document.getElementById('btn_save_text').textContent = 'Registrar Alumno';
             document.getElementById('alumno_id').value = '';
         });
-
+        
         // Delete alumno with confirmation
         function deleteAlumno(id, name) {
             if (confirm('¿Estás seguro de que deseas eliminar al alumno "' + name + '"?\nEsta acción no se puede deshacer.')) {
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = '';
-
+                
                 const action = document.createElement('input');
                 action.type = 'hidden';
                 action.name = 'action';
                 action.value = 'delete';
-
+                
                 const alumnoId = document.createElement('input');
                 alumnoId.type = 'hidden';
                 alumnoId.name = 'id';
                 alumnoId.value = id;
-
+                
                 form.appendChild(action);
                 form.appendChild(alumnoId);
                 document.body.appendChild(form);
@@ -453,81 +514,23 @@ $stats_grupos = $db->resultSet();
             }
         }
     </script>
-
+    
     <!-- Dark Mode Toggle -->
     <button class="dark-mode-toggle" id="darkModeToggle" title="Cambiar modo">
         <i class="fas fa-moon"></i>
     </button>
-<!-- Modal: Importar Alumnos desde Excel -->
-<div class="modal fade" id="importModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <form method="POST" action="importar_alumnos_excel.php" enctype="multipart/form-data">
-                <div class="modal-header gradient-primary">
-                    <h5 class="modal-title text-white">
-                        <i class="fas fa-file-excel me-2"></i>Importar Alumnos desde Excel
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                
-                <div class="modal-body p-4">
-                    <div class="alert alert-info">
-                        <i class="fas fa-info-circle me-2"></i>
-                        <strong>Instrucciones:</strong>
-                        <ol class="mb-0 mt-2">
-                            <li>Descarga la plantilla Excel con el botón correspondiente</li>
-                            <li>Llena los datos respetando el formato indicado</li>
-                            <li>Sube el archivo Excel (.xlsx) aquí</li>
-                            <li>Haz clic en "Importar Alumnos"</li>
-                        </ol>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">
-                            <i class="fas fa-file-excel me-1 text-success"></i>Archivo Excel (.xlsx)
-                        </label>
-                        <input type="file" class="form-control" name="archivo_excel" accept=".xlsx" required>
-                        <small class="text-muted">
-                            <i class="fas fa-exclamation-triangle me-1"></i>
-                            Máximo 5MB. Solo archivos .xlsx
-                        </small>
-                    </div>
-                    
-                    <div class="alert alert-warning">
-                        <i class="fas fa-shield-alt me-2"></i>
-                        <strong>Validaciones automáticas:</strong>
-                        <ul class="mb-0 mt-2">
-                            <li>Formato de fecha: AAAA-MM-DD</li>
-                            <li>Grados y grupos válidos según sistema</li>
-                            <li>Campos obligatorios marcados con *</li>
-                            <li>Duplicados se omitirán automáticamente</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="fas fa-times me-1"></i>Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-success">
-                        <i class="fas fa-cloud-upload-alt me-1"></i>Importar Alumnos
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const darkModeToggle = document.getElementById('darkModeToggle');
             const body = document.body;
-
+            
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'dark') {
                 body.setAttribute('data-theme', 'dark');
                 darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
             }
-
+            
             darkModeToggle.addEventListener('click', function() {
                 if (body.getAttribute('data-theme') === 'dark') {
                     body.removeAttribute('data-theme');
@@ -542,5 +545,4 @@ $stats_grupos = $db->resultSet();
         });
     </script>
 </body>
-
 </html>

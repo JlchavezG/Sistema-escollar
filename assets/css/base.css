@@ -47,7 +47,7 @@ a {
 
 a:hover {
     color: var(--primary-color);
-    opacity: 0.8;
+    opacity: 0.85;
 }
 
 a.text-decoration-none {
@@ -261,4 +261,14 @@ a.text-decoration-none {
     font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
     font-weight: var(--font-weight-medium);
+}
+
+/* ===== FORMS - CRITICAL FIX FOR PLACEHOLDER ===== */
+.form-control::placeholder {
+    color: var(--color-text-secondary);
+    opacity: 1; /* Firefox fix */
+}
+
+[data-theme="dark"] .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.45) !important;
 }
