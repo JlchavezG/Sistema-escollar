@@ -7,7 +7,7 @@ $db = new Database();
 $message = '';
 $message_type = '';
 
-// Obtener información del usuario
+// Obtener información del usuario ACTUAL (no del session)
 $db->query("SELECT * FROM usuarios WHERE id = :id");
 $db->bind(':id', $_SESSION['user_id']);
 $usuario = $db->single();
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_profile'])) {
         $db->bind(':id', $_SESSION['user_id']);
         
         if ($db->execute()) {
-            // Actualizar sesión
+            // Actualizar sesión con nuevos datos
             $_SESSION['user_name'] = $nombre . ' ' . $apellido_paterno;
             $_SESSION['user_email'] = $email;
             
@@ -94,7 +94,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['change_password'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/main.css">
-     <!-- Sidebar Toggle JS -->
     <script src="../assets/js/sidebar-toggle.js" defer></script>
 </head>
 <body>
@@ -106,10 +105,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['change_password'])) {
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
-                <!-- Sidebar Toggle Button -->
-<button class="sidebar-toggle-btn" id="sidebarToggle" aria-label="Toggle sidebar">
-    <i class="fas fa-bars"></i>
-</button>
+                <button class="sidebar-toggle-btn" id="sidebarToggle" aria-label="Toggle sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -252,7 +250,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['change_password'])) {
                 </div>
             </div>
             
-            <!-- Información de Cuenta -->
+            <!-- Información de Cuenta - CORREGIDO -->
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Información de Cuenta</h5>
@@ -262,9 +260,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['change_password'])) {
                         <div class="col-md-4 mb-3">
                             <strong>Tipo de Usuario:</strong>
                             <div class="mt-2">
-                                <span class="badge bg-primary">
-                                    <i class="fas fa-user-tie me-1"></i>Administrativo
-                                </span>
+                                <?php 
+                                // ✅ CORREGIDO: Mostrar tipo dinámico según la BD
+                                if ($usuario['tipo'] == 'profesor') {
+                                    echo '<span class="badge bg-info"><i class="fas fa-chalkboard-teacher me-1"></i>Profesor</span>';
+                                } elseif ($usuario['tipo'] == 'administrativo') {
+                                    echo '<span class="badge bg-primary"><i class="fas fa-user-tie me-1"></i>Administrativo</span>';
+                                } else { // sistemas
+                                    echo '<span class="badge bg-danger"><i class="fas fa-user-shield me-1"></i>Sistemas</span>';
+                                }
+                                ?>
                             </div>
                         </div>
                         
@@ -296,10 +301,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['change_password'])) {
                             <i class="fas fa-home"></i>
                             <span>Dashboard</span>
                         </a>
-                        <a href="gestion_usuarios.php" class="btn-action gradient-info">
-                            <i class="fas fa-users"></i>
+                        <?php if ($_SESSION['user_role'] === 'sistemas'): ?>
+                        <a href="gestion_usuarios.php" class="btn-action gradient-danger">
+                            <i class="fas fa-users-cog"></i>
                             <span>Gestión de Usuarios</span>
                         </a>
+                        <a href="configuracion_sistema.php" class="btn-action gradient-warning">
+                            <i class="fas fa-cog"></i>
+                            <span>Configuración</span>
+                        </a>
+                        <?php else: ?>
+                        <a href="gestion_usuarios.php" class="btn-action gradient-info">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span>Gestión de Profesores</span>
+                        </a>
+                        <?php endif; ?>
                         <a href="gestion_alumnos.php" class="btn-action gradient-secondary">
                             <i class="fas fa-user-graduate"></i>
                             <span>Gestión de Alumnos</span>

@@ -1,4 +1,5 @@
 <?php
+// ¡RUTA CORRECTA Y CONSISTENTE! (case-sensitive)
 require_once 'includes/config.php';
 $auth = new Auth();
 
@@ -15,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
     
     if ($auth->login($email, $password)) {
-        header('Location: dashboard.php');
+        // Redirección automática por rol ya está en Auth::login()
         exit();
     } else {
         $error = 'Credenciales incorrectas. Por favor, intenta de nuevo.';
@@ -35,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="login-container">
         <div class="login-header">
-            <h2><?php echo APP_NAME; ?></h2>
+            <h2>🏫 <?php echo APP_NAME; ?></h2>
             <p>Inicia sesión para continuar</p>
         </div>
         

@@ -3,6 +3,9 @@ require_once '../includes/config.php';
 $auth = new Auth();
 $auth->requireAdmin();
 
+// Verificar si el usuario actual es sistemas
+$is_sistemas = $auth->isSistemas();
+
 $db = new Database();
 $message = '';
 $message_type = '';
@@ -20,51 +23,102 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $telefono = sanitizeInput($_POST['telefono']);
             $tipo = sanitizeInput($_POST['tipo']);
             
-            $password = $action == 'create' ? password_hash($_POST['password'], PASSWORD_DEFAULT) : null;
-            
-            try {
-                if ($action == 'create') {
-                    $db->query("INSERT INTO usuarios (nombre, apellido_paterno, apellido_materno, email, password, tipo, telefono, created_at) 
-                                VALUES (:nombre, :apellido_paterno, :apellido_materno, :email, :password, :tipo, :telefono, NOW())");
-                    $db->bind(':password', $password);
-                } else {
-                    $id = intval($_POST['id']);
-                    $db->query("UPDATE usuarios SET nombre = :nombre, apellido_paterno = :apellido_paterno, 
-                                apellido_materno = :apellido_materno, email = :email, tipo = :tipo, telefono = :telefono, 
-                                updated_at = NOW() WHERE id = :id");
-                    $db->bind(':id', $id);
-                }
-                
-                $db->bind(':nombre', $nombre);
-                $db->bind(':apellido_paterno', $apellido_paterno);
-                $db->bind(':apellido_materno', $apellido_materno);
-                $db->bind(':email', $email);
-                $db->bind(':tipo', $tipo);
-                $db->bind(':telefono', $telefono);
-                
-                if ($db->execute()) {
-                    $message = $action == 'create' ? 'Usuario creado exitosamente' : 'Usuario actualizado exitosamente';
-                    $message_type = 'success';
-                }
-            } catch (PDOException $e) {
-                $message = 'Error: ' . $e->getMessage();
+            // Verificar permisos para crear/editar tipos sensibles
+            if (!$is_sistemas && in_array($tipo, ['administrativo', 'sistemas'])) {
+                $message = 'No tienes permisos para gestionar usuarios de este tipo';
                 $message_type = 'danger';
+            } else {
+                try {
+                    if ($action == 'create') {
+                        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                        $db->query("INSERT INTO usuarios (nombre, apellido_paterno, apellido_materno, email, password, tipo, telefono, created_at) 
+                                    VALUES (:nombre, :apellido_paterno, :apellido_materno, :email, :password, :tipo, :telefono, NOW())");
+                        $db->bind(':password', $password);
+                    } else {
+                        $id = intval($_POST['id']);
+                        // Verificar que no se está editando a un admin/sistemas sin permisos
+                        if (!$is_sistemas) {
+                            $db->query("SELECT tipo FROM usuarios WHERE id = :id");
+                            $db->bind(':id', $id);
+                            $target_user = $db->single();
+                            if ($target_user && in_array($target_user['tipo'], ['administrativo', 'sistemas'])) {
+                                throw new Exception('No tienes permisos para modificar este usuario');
+                            }
+                        }
+                        $db->query("UPDATE usuarios SET nombre = :nombre, apellido_paterno = :apellido_paterno, 
+                                    apellido_materno = :apellido_materno, email = :email, tipo = :tipo, telefono = :telefono, 
+                                    updated_at = NOW() WHERE id = :id");
+                        $db->bind(':id', $id);
+                    }
+                    
+                    $db->bind(':nombre', $nombre);
+                    $db->bind(':apellido_paterno', $apellido_paterno);
+                    $db->bind(':apellido_materno', $apellido_materno);
+                    $db->bind(':email', $email);
+                    $db->bind(':tipo', $tipo);
+                    $db->bind(':telefono', $telefono);
+                    
+                    if ($db->execute()) {
+                        $message = $action == 'create' ? 'Usuario creado exitosamente' : 'Usuario actualizado exitosamente';
+                        $message_type = 'success';
+                    }
+                } catch (PDOException $e) {
+                    $message = 'Error: ' . $e->getMessage();
+                    $message_type = 'danger';
+                } catch (Exception $e) {
+                    $message = $e->getMessage();
+                    $message_type = 'danger';
+                }
             }
         } elseif ($action == 'delete') {
             $id = intval($_POST['id']);
             
+            // Verificar permisos antes de eliminar
             if ($id == $_SESSION['user_id']) {
                 $message = 'No puedes eliminarte a ti mismo';
                 $message_type = 'warning';
             } else {
-                $db->query("DELETE FROM usuarios WHERE id = :id");
-                $db->bind(':id', $id);
-                
-                if ($db->execute()) {
-                    $message = 'Usuario eliminado exitosamente';
-                    $message_type = 'success';
-                } else {
-                    $message = 'Error al eliminar usuario';
+                try {
+                    // Verificar tipo de usuario a eliminar
+                    $db->query("SELECT tipo FROM usuarios WHERE id = :id");
+                    $db->bind(':id', $id);
+                    $target_user = $db->single();
+                    
+                    // Solo sistemas puede eliminar administrativos o sistemas
+                    if (!$is_sistemas && in_array($target_user['tipo'], ['administrativo', 'sistemas'])) {
+                        $message = 'No tienes permisos para eliminar este usuario';
+                        $message_type = 'danger';
+                    } else {
+                        // ELIMINACIÓN SEGURA CON TRANSACCIÓN
+                        $db->beginTransaction();
+                        
+                        // 1. Eliminar asignaciones de módulos
+                        $db->query("DELETE FROM asignacion_modulos WHERE profesor_id = :id");
+                        $db->bind(':id', $id);
+                        $db->execute();
+                        
+                        // 2. Eliminar calificaciones
+                        $db->query("DELETE FROM calificaciones WHERE profesor_id = :id");
+                        $db->bind(':id', $id);
+                        $db->execute();
+                        
+                        // 3. Eliminar usuario
+                        $db->query("DELETE FROM usuarios WHERE id = :id");
+                        $db->bind(':id', $id);
+                        $db->execute();
+                        
+                        $db->endTransaction();
+                        
+                        $message = 'Usuario eliminado exitosamente';
+                        $message_type = 'success';
+                    }
+                } catch (PDOException $e) {
+                    $db->cancelTransaction();
+                    $message = 'Error al eliminar usuario: ' . $e->getMessage();
+                    $message_type = 'danger';
+                } catch (Exception $e) {
+                    $db->cancelTransaction();
+                    $message = $e->getMessage();
                     $message_type = 'danger';
                 }
             }
@@ -89,8 +143,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-// Obtener todos los usuarios
-$db->query("SELECT * FROM usuarios ORDER BY tipo DESC, apellido_paterno ASC");
+// Obtener todos los usuarios - con restricción para administrativos
+if ($is_sistemas) {
+    $db->query("SELECT * FROM usuarios ORDER BY tipo DESC, apellido_paterno ASC");
+} else {
+    // Administrativos solo ven profesores
+    $db->query("SELECT * FROM usuarios WHERE tipo = 'profesor' ORDER BY apellido_paterno ASC");
+}
 $usuarios = $db->resultSet();
 
 // Obtener usuario para editar (si existe)
@@ -111,22 +170,20 @@ if (isset($_GET['edit'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/main.css">
-     <!-- Sidebar Toggle JS -->
     <script src="../assets/js/sidebar-toggle.js" defer></script>
 </head>
 <body>
     <!-- Sidebar -->
-    <?php include 'sidebarAdmin.php';?>
+    <?php include 'sidebarAdmin.php'; ?>
     
     <!-- Main Content -->
     <div class="main-content">
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
-                <!-- Sidebar Toggle Button -->
-<button class="sidebar-toggle-btn" id="sidebarToggle" aria-label="Toggle sidebar">
-    <i class="fas fa-bars"></i>
-</button>
+                <button class="sidebar-toggle-btn" id="sidebarToggle" aria-label="Toggle sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -139,8 +196,8 @@ if (isset($_GET['edit'])) {
                                 <?php echo $_SESSION['user_name']; ?>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">
-                                    <i class="fas fa-cog me-2"></i> Configuración
+                                <li><a class="dropdown-item" href="perfil.php">
+                                    <i class="fas fa-user me-2"></i> Mi Perfil
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="../logout.php">
@@ -170,16 +227,16 @@ if (isset($_GET['edit'])) {
                     <div class="col-md-8">
                         <h2 class="mb-0">
                             <i class="fas fa-users me-3"></i>
-                            Gestión de Usuarios
+                            <?php echo $is_sistemas ? 'Gestión de Usuarios' : 'Gestión de Profesores'; ?>
                         </h2>
                         <p class="text-muted mb-0 mt-2">
                             <i class="fas fa-info-circle me-2"></i>
-                            Administra profesores y personal administrativo del sistema
+                            <?php echo $is_sistemas ? 'Administra todos los usuarios del sistema' : 'Gestiona profesores y personal docente'; ?>
                         </p>
                     </div>
                     <div class="col-md-4 text-md-end mt-3 mt-md-0">
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal">
-                            <i class="fas fa-plus me-2"></i>Nuevo Usuario
+                            <i class="fas fa-plus me-2"></i><?php echo $is_sistemas ? 'Nuevo Usuario' : 'Nuevo Profesor'; ?>
                         </button>
                     </div>
                 </div>
@@ -188,11 +245,21 @@ if (isset($_GET['edit'])) {
             <!-- Statistics Cards -->
             <div class="stats-grid mb-4">
                 <?php
-                $db->query("SELECT COUNT(*) as total FROM usuarios WHERE tipo = 'profesor'");
-                $total_profesores = $db->single()['total'];
-                
-                $db->query("SELECT COUNT(*) as total FROM usuarios WHERE tipo = 'administrativo'");
-                $total_administrativos = $db->single()['total'];
+                if ($is_sistemas) {
+                    $db->query("SELECT COUNT(*) as total FROM usuarios WHERE tipo = 'profesor'");
+                    $total_profesores = $db->single()['total'];
+                    
+                    $db->query("SELECT COUNT(*) as total FROM usuarios WHERE tipo = 'administrativo'");
+                    $total_administrativos = $db->single()['total'];
+                    
+                    $db->query("SELECT COUNT(*) as total FROM usuarios WHERE tipo = 'sistemas'");
+                    $total_sistemas = $db->single()['total'];
+                } else {
+                    $db->query("SELECT COUNT(*) as total FROM usuarios WHERE tipo = 'profesor'");
+                    $total_profesores = $db->single()['total'];
+                    $total_administrativos = 0;
+                    $total_sistemas = 0;
+                }
                 ?>
                 
                 <div class="stat-item">
@@ -201,6 +268,7 @@ if (isset($_GET['edit'])) {
                     <div class="stat-label">Profesores</div>
                 </div>
                 
+                <?php if ($is_sistemas): ?>
                 <div class="stat-item">
                     <i class="fas fa-user-tie fa-2x text-primary"></i>
                     <div class="stat-number"><?php echo $total_administrativos; ?></div>
@@ -208,16 +276,17 @@ if (isset($_GET['edit'])) {
                 </div>
                 
                 <div class="stat-item">
-                    <i class="fas fa-users fa-2x text-secondary"></i>
-                    <div class="stat-number"><?php echo $total_profesores + $total_administrativos; ?></div>
-                    <div class="stat-label">Total Usuarios</div>
+                    <i class="fas fa-user-shield fa-2x text-danger"></i>
+                    <div class="stat-number"><?php echo $total_sistemas; ?></div>
+                    <div class="stat-label">Sistemas</div>
                 </div>
+                <?php endif; ?>
             </div>
             
             <!-- Users List -->
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-list me-2"></i>Lista de Usuarios</h5>
+                    <h5 class="mb-0"><i class="fas fa-list me-2"></i>Lista de <?php echo $is_sistemas ? 'Usuarios' : 'Profesores'; ?></h5>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -237,6 +306,12 @@ if (isset($_GET['edit'])) {
                                 <?php if (count($usuarios) > 0): ?>
                                     <?php $contador = 1; ?>
                                     <?php foreach ($usuarios as $usuario): ?>
+                                        <?php 
+                                        // Ocultar usuarios administrativos/sistemas para administrativos normales
+                                        if (!$is_sistemas && in_array($usuario['tipo'], ['administrativo', 'sistemas'])) {
+                                            continue;
+                                        }
+                                        ?>
                                         <tr>
                                             <td><?php echo $contador++; ?></td>
                                             <td>
@@ -250,9 +325,13 @@ if (isset($_GET['edit'])) {
                                                     <span class="badge bg-info">
                                                         <i class="fas fa-chalkboard-teacher me-1"></i>Profesor
                                                     </span>
-                                                <?php else: ?>
+                                                <?php elseif ($usuario['tipo'] == 'administrativo'): ?>
                                                     <span class="badge bg-primary">
                                                         <i class="fas fa-user-tie me-1"></i>Administrativo
+                                                    </span>
+                                                <?php else: ?>
+                                                    <span class="badge bg-danger">
+                                                        <i class="fas fa-user-shield me-1"></i>Sistemas
                                                     </span>
                                                 <?php endif; ?>
                                             </td>
@@ -263,21 +342,25 @@ if (isset($_GET['edit'])) {
                                             </td>
                                             <td>
                                                 <div class="d-flex gap-2">
-                                                    <button type="button" class="btn btn-sm btn-primary" 
-                                                            data-bs-toggle="modal" data-bs-target="#userModal"
-                                                            onclick='editUser(<?php echo json_encode($usuario); ?>)'>
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-warning" 
-                                                            data-bs-toggle="modal" data-bs-target="#passwordModal"
-                                                            onclick='changePassword(<?php echo $usuario['id']; ?>, "<?php echo htmlspecialchars($usuario['nombre']); ?>")'>
-                                                        <i class="fas fa-key"></i>
-                                                    </button>
-                                                    <?php if ($usuario['id'] != $_SESSION['user_id']): ?>
-                                                        <button type="button" class="btn btn-sm btn-danger" 
-                                                                onclick='deleteUser(<?php echo $usuario['id']; ?>, "<?php echo htmlspecialchars($usuario['nombre']); ?>")'>
-                                                            <i class="fas fa-trash"></i>
+                                                    <?php if ($is_sistemas || $usuario['tipo'] == 'profesor'): ?>
+                                                        <button type="button" class="btn btn-sm btn-primary" 
+                                                                data-bs-toggle="modal" data-bs-target="#userModal"
+                                                                onclick='editUser(<?php echo json_encode($usuario); ?>)'>
+                                                            <i class="fas fa-edit"></i>
                                                         </button>
+                                                        <button type="button" class="btn btn-sm btn-warning" 
+                                                                data-bs-toggle="modal" data-bs-target="#passwordModal"
+                                                                onclick='changePassword(<?php echo $usuario['id']; ?>, "<?php echo htmlspecialchars($usuario['nombre']); ?>")'>
+                                                            <i class="fas fa-key"></i>
+                                                        </button>
+                                                        <?php if ($usuario['id'] != $_SESSION['user_id']): ?>
+                                                            <button type="button" class="btn btn-sm btn-danger" 
+                                                                    onclick='deleteUser(<?php echo $usuario['id']; ?>, "<?php echo htmlspecialchars($usuario['nombre']); ?>")'>
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        <?php endif; ?>
+                                                    <?php else: ?>
+                                                        <span class="text-muted">Sin permisos</span>
                                                     <?php endif; ?>
                                                 </div>
                                             </td>
@@ -288,9 +371,9 @@ if (isset($_GET['edit'])) {
                                         <td colspan="7" class="text-center py-5">
                                             <div class="text-muted">
                                                 <i class="fas fa-users-slash fa-3x mb-3"></i>
-                                                <p>No hay usuarios registrados</p>
+                                                <p>No hay <?php echo $is_sistemas ? 'usuarios' : 'profesores'; ?> registrados</p>
                                                 <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#userModal">
-                                                    <i class="fas fa-plus me-2"></i>Crear Primer Usuario
+                                                    <i class="fas fa-plus me-2"></i><?php echo $is_sistemas ? 'Crear Primer Usuario' : 'Registrar Primer Profesor'; ?>
                                                 </button>
                                             </div>
                                         </td>
@@ -348,11 +431,18 @@ if (isset($_GET['edit'])) {
                             
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Tipo de Usuario <span class="text-danger">*</span></label>
-                                <select class="form-select" name="tipo" id="tipo" required>
-                                    <option value="">Seleccionar...</option>
-                                    <option value="profesor">Profesor</option>
-                                    <option value="administrativo">Administrativo</option>
-                                </select>
+                                <?php if ($is_sistemas): ?>
+                                    <select class="form-select" name="tipo" id="tipo" required>
+                                        <option value="">Seleccionar...</option>
+                                        <option value="profesor">Profesor</option>
+                                        <option value="administrativo">Administrativo</option>
+                                        <option value="sistemas">Sistemas</option>
+                                    </select>
+                                <?php else: ?>
+                                    <input type="hidden" name="tipo" id="tipo" value="profesor">
+                                    <div class="form-control" disabled>Profesor</div>
+                                    <small class="text-muted">Solo puedes crear usuarios de tipo Profesor</small>
+                                <?php endif; ?>
                             </div>
                             
                             <div class="col-md-12 mb-3" id="password_field">
@@ -494,7 +584,7 @@ if (isset($_GET['edit'])) {
         
         // Delete user with confirmation
         function deleteUser(id, name) {
-            if (confirm('¿Estás seguro de que deseas eliminar al usuario "' + name + '"?\nEsta acción no se puede deshacer.')) {
+            if (confirm('¿Estás seguro de que deseas eliminar al usuario "' + name + '"?\nEsta acción eliminará también sus asignaciones y calificaciones.')) {
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = '';

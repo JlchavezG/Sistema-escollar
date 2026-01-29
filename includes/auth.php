@@ -1,24 +1,30 @@
 <?php
 class Auth {
-    private $db;
-    
-    public function __construct() {
-        $this->db = new Database();
-    }
+    // NOTA: session_start() se maneja ÚNICAMENTE en config.php
+    // NOTA: Constantes DB_* se definen en config.php ANTES de incluir este archivo
     
     public function login($email, $password) {
-        $this->db->query("SELECT * FROM usuarios WHERE email = :email");
-        $this->db->bind(':email', $email);
-        $row = $this->db->single();
+        $db = new Database(); // Database ya tiene acceso a DB_HOST, etc.
+        $db->query("SELECT * FROM usuarios WHERE email = :email");
+        $db->bind(':email', $email);
+        $user = $db->single();
         
-        if ($row && password_verify($password, $row['password'])) {
-            $_SESSION['user_id'] = $row['id'];
-            $_SESSION['user_name'] = $row['nombre'] . ' ' . $row['apellido_paterno'];
-            $_SESSION['user_type'] = $row['tipo'];
-            $_SESSION['user_email'] = $row['email'];
-            return true;
+        if ($user && password_verify($password, $user['password'])) {
+            // Session ya está iniciada por config.php
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_name'] = $user['nombre'] . ' ' . $user['apellido_paterno'];
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_role'] = $user['tipo']; // 'profesor', 'administrativo', o 'sistemas'
+            $_SESSION['user_tipo'] = $user['tipo']; // Para compatibilidad
+            
+            // Redirección por rol
+            if ($user['tipo'] == 'profesor') {
+                header('Location: profesores/dashboard.php');
+            } else {
+                header('Location: administrativos/dashboard.php');
+            }
+            exit();
         }
-        
         return false;
     }
     
@@ -26,40 +32,47 @@ class Auth {
         return isset($_SESSION['user_id']);
     }
     
-    public function isAdmin() {
-        return isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'administrativo';
-    }
-    
-    public function isProfesor() {
-        return isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'profesor';
-    }
-    
     public function logout() {
+        // Session ya está iniciada por config.php
         session_destroy();
-        return true;
+        header('Location: login.php');
+        exit();
     }
     
+    // Método para requerir login (GENÉRICO - sin verificar rol específico)
     public function requireLogin() {
-        if (!$this->isLoggedIn()) {
-            header('Location: ' . BASE_URL . 'login.php');
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: login.php');
             exit();
         }
     }
     
+    // Método actualizado: permite administrativos Y sistemas
     public function requireAdmin() {
-        $this->requireLogin();
-        if (!$this->isAdmin()) {
-            header('Location: ' . BASE_URL . 'dashboard.php');
+        if (!isset($_SESSION['user_role']) || !in_array($_SESSION['user_role'], ['administrativo', 'sistemas'])) {
+            header('Location: login.php');
+            exit();
+        }
+    }
+    
+    // Nuevo método: solo para rol sistemas
+    public function requireSistemas() {
+        if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'sistemas') {
+            header('Location: login.php');
             exit();
         }
     }
     
     public function requireProfesor() {
-        $this->requireLogin();
-        if (!$this->isProfesor()) {
-            header('Location: ' . BASE_URL . 'dashboard.php');
+        if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'profesor') {
+            header('Location: login.php');
             exit();
         }
+    }
+    
+    // Verificar si es sistemas (para mostrar/ocultar elementos en UI)
+    public function isSistemas() {
+        return isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'sistemas';
     }
 }
 ?>

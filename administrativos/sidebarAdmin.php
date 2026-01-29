@@ -5,7 +5,17 @@
             <i class="fas fa-graduation-cap"></i>
         </div>
         <h3><?php echo APP_NAME; ?></h3>
-        <p class="text-white-50 small">Admin Panel</p>
+        <p class="text-white-50 small">
+            <?php 
+            $role_labels = [
+                'profesor' => 'Profesor Panel',
+                'administrativo' => 'Admin Panel',
+                'sistemas' => 'Sistemas Panel'
+            ];
+            // Usar user_role de sesión (config.php ya inició sesión)
+            echo $role_labels[$_SESSION['user_role']] ?? 'Panel';
+            ?>
+        </p>
     </div>
     
     <div class="sidebar-menu">
@@ -16,12 +26,29 @@
                     <span class="nav-text">Dashboard</span>
                 </a>
             </li>
+            
+            <?php if ($_SESSION['user_role'] === 'sistemas'): ?>
             <li class="nav-item">
                 <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'gestion_usuarios.php' ? 'active' : ''; ?>" href="gestion_usuarios.php">
-                    <i class="fas fa-users"></i>
+                    <i class="fas fa-users-cog"></i>
                     <span class="nav-text">Gestión de Usuarios</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'configuracion_sistema.php' ? 'active' : ''; ?>" href="configuracion_sistema.php">
+                    <i class="fas fa-cog"></i>
+                    <span class="nav-text">Configuración del Sistema</span>
+                </a>
+            </li>
+            <?php else: ?>
+            <li class="nav-item">
+                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'gestion_usuarios.php' ? 'active' : ''; ?>" href="gestion_usuarios.php">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span class="nav-text">Gestión de Profesores</span>
+                </a>
+            </li>
+            <?php endif; ?>
+            
             <li class="nav-item">
                 <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'gestion_alumnos.php' ? 'active' : ''; ?>" href="gestion_alumnos.php">
                     <i class="fas fa-user-graduate"></i>
