@@ -82,6 +82,8 @@ function safeValue($value, $default = 0) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/main.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+     <!-- Sidebar Toggle JS -->
+    <script src="../assets/js/sidebar-toggle.js" defer></script>
     <style>
         .report-card {
             background: var(--color-white);

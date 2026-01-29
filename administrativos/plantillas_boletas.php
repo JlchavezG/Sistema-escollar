@@ -310,6 +310,8 @@ $default_css = '
             display: inline-block;
         }
     </style>
+     <!-- Sidebar Toggle JS -->
+    <script src="../assets/js/sidebar-toggle.js" defer></script>
 </head>
 <body>
     <!-- Sidebar -->
