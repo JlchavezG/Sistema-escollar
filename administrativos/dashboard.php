@@ -49,22 +49,24 @@ foreach ($meses as $mes) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/main.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <!-- Sidebar Toggle JS -->
     <script src="../assets/js/sidebar-toggle.js" defer></script>
-    
 </head>
 <body>
     <!-- Sidebar -->
     <?php include 'sidebarAdmin.php'; ?>
+    
     <!-- Main Content -->
     <div class="main-content">
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
                 <!-- Sidebar Toggle Button -->
-<button class="sidebar-toggle-btn" id="sidebarToggle" aria-label="Toggle sidebar">
-    <i class="fas fa-bars"></i>
-</button>
+                <button class="sidebar-toggle-btn" id="sidebarToggle" aria-label="Toggle sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -77,8 +79,8 @@ foreach ($meses as $mes) {
                                 <?php echo $_SESSION['user_name']; ?>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">
-                                    <i class="fas fa-cog me-2"></i> Configuración
+                                <li><a class="dropdown-item" href="perfil.php">
+                                    <i class="fas fa-user me-2"></i> Mi Perfil
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="../logout.php">
@@ -164,15 +166,15 @@ foreach ($meses as $mes) {
                                     <i class="fas fa-user-plus"></i>
                                     <span>Registrar Alumno</span>
                                 </a>
-                                <a href="gestion_usuarios.php" class="btn-action gradient-info">
+                                <a href="gestion_usuarios.php" class="btn-action gradient-success">
                                     <i class="fas fa-user-plus"></i>
                                     <span>Registrar Profesor</span>
                                 </a>
-                                <a href="asignar_modulos.php" class="btn-action gradient-secondary">
+                                <a href="asignar_modulos.php" class="btn-action gradient-info">
                                     <i class="fas fa-book"></i>
                                     <span>Asignar Módulos</span>
                                 </a>
-                                <a href="generar_boletas.php" class="btn-action gradient-accent">
+                                <a href="generar_boletas.php" class="btn-action gradient-warning">
                                     <i class="fas fa-file-pdf"></i>
                                     <span>Generar Boletas</span>
                                 </a>
@@ -238,7 +240,7 @@ foreach ($meses as $mes) {
                                                 <strong><?php echo htmlspecialchars($profesor['apellido_paterno']); ?></strong>
                                                 <small class="d-block text-muted"><?php echo htmlspecialchars($profesor['nombre']); ?></small>
                                             </div>
-                                            <span class="badge bg-info">Profesor</span>
+                                            <span class="badge bg-success">Profesor</span>
                                         </div>
                                     </li>
                                 <?php endforeach; ?>
@@ -285,6 +287,7 @@ foreach ($meses as $mes) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <script>
+        // Chart.js para calificaciones por mes
         document.addEventListener('DOMContentLoaded', function() {
             const ctx = document.getElementById('calificacionesChart').getContext('2d');
             const calificacionesChart = new Chart(ctx, {

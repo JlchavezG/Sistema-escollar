@@ -1,6 +1,6 @@
 /**
- * Sidebar Toggle Functionality
- * Sistema Escolar - Sidebar Retráctil
+ * Sidebar Toggle Functionality - CORREGIDO
+ * Sistema Escolar - Sidebar Retráctil con Iconos Centrados
  */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -8,6 +8,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const sidebar = document.querySelector('.sidebar');
     const mainContent = document.querySelector('.main-content');
     const body = document.body;
+    
+    if (!sidebarToggle || !sidebar || !mainContent) {
+        console.warn('Sidebar elements not found');
+        return;
+    }
     
     // Verificar estado guardado en localStorage
     const sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
@@ -48,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function handleMobileView(e) {
         if (e.matches) {
-            // Mobile view
+            // Mobile view - sidebar oculto por defecto
             if (!sidebar.classList.contains('collapsed')) {
                 sidebar.classList.add('collapsed');
                 mainContent.classList.add('collapsed');
@@ -56,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sidebarToggle.classList.add('sidebar-mobile-active');
             }
         } else {
-            // Desktop view
+            // Desktop view - restaurar estado guardado
             sidebarToggle.classList.remove('sidebar-mobile-active');
             const sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
             if (sidebarCollapsed) {
@@ -86,5 +91,18 @@ document.addEventListener('DOMContentLoaded', function() {
             sidebarToggle.innerHTML = '<i class="fas fa-bars"></i>';
             sidebarToggle.classList.add('sidebar-mobile-active');
         }
+    });
+    
+    // Cerrar sidebar al hacer clic en un enlace (mobile)
+    const navLinks = document.querySelectorAll('.sidebar-menu .nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (mediaQuery.matches && !sidebar.classList.contains('collapsed')) {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('collapsed');
+                sidebarToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                sidebarToggle.classList.add('sidebar-mobile-active');
+            }
+        });
     });
 });
