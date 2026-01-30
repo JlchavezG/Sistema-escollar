@@ -79,6 +79,12 @@
                     <span class="nav-text">Plantillas de Boletas</span>
                 </a>
             </li>
+               <li class="nav-item">
+    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'gestion_credenciales.php' || basename($_SERVER['PHP_SELF']) == 'generar_credenciales.php' ? 'active' : ''; ?>" href="gestion_credenciales.php">
+        <i class="fas fa-id-card"></i>
+        <span class="nav-text">Gestión de Credenciales</span>
+    </a>
+</li>
             <li class="nav-item">
                 <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'reportes.php' ? 'active' : ''; ?>" href="reportes.php">
                     <i class="fas fa-chart-bar"></i>
