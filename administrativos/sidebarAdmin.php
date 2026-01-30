@@ -6,28 +6,28 @@
         </div>
         <h3><?php echo APP_NAME; ?></h3>
         <p class="text-white-50 small">
-            <?php
+            <?php 
             $role_labels = [
                 'profesor' => 'Profesor Panel',
                 'administrativo' => 'Admin Panel',
                 'sistemas' => 'Sistemas Panel'
             ];
-            // Usar user_role de sesión (config.php ya inició sesión)
             echo $role_labels[$_SESSION['user_role']] ?? 'Panel';
             ?>
         </p>
     </div>
-
-    <div class="sidebar-menu">
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : ''; ?>" href="dashboard.php">
-                    <i class="fas fa-home"></i>
-                    <span class="nav-text">Dashboard</span>
-                </a>
-            </li>
-
-            <?php if ($_SESSION['user_role'] === 'sistemas'): ?>
+    
+    <div class="sidebar-menu-container">
+        <div class="sidebar-menu">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : ''; ?>" href="dashboard.php">
+                        <i class="fas fa-home"></i>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                </li>
+                
+                <?php if ($_SESSION['user_role'] === 'sistemas'): ?>
                 <li class="nav-item">
                     <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'gestion_usuarios.php' ? 'active' : ''; ?>" href="gestion_usuarios.php">
                         <i class="fas fa-users-cog"></i>
@@ -40,96 +40,97 @@
                         <span class="nav-text">Configuración del Sistema</span>
                     </a>
                 </li>
-            <?php else: ?>
+                <?php else: ?>
                 <li class="nav-item">
                     <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'gestion_usuarios.php' ? 'active' : ''; ?>" href="gestion_usuarios.php">
                         <i class="fas fa-chalkboard-teacher"></i>
                         <span class="nav-text">Gestión de Profesores</span>
                     </a>
                 </li>
-            <?php endif; ?>
-
-            <li class="nav-item">
-                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'gestion_alumnos.php' ? 'active' : ''; ?>" href="gestion_alumnos.php">
-                    <i class="fas fa-user-graduate"></i>
-                    <span class="nav-text">Gestión de Alumnos</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'gestion_modulos.php' ? 'active' : ''; ?>" href="gestion_modulos.php">
-                    <i class="fas fa-book-open"></i>
-                    <span class="nav-text">Gestión de Módulos</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'asignar_modulos.php' ? 'active' : ''; ?>" href="asignar_modulos.php">
-                    <i class="fas fa-book"></i>
-                    <span class="nav-text">Asignar Módulos</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'generar_boletas.php' ? 'active' : ''; ?>" href="generar_boletas.php">
-                    <i class="fas fa-file-alt"></i>
-                    <span class="nav-text">Generar Boletas</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'plantillas_boletas.php' ? 'active' : ''; ?>" href="plantillas_boletas.php">
-                    <i class="fas fa-palette"></i>
-                    <span class="nav-text">Plantillas de Boletas</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'gestion_credenciales.php' || basename($_SERVER['PHP_SELF']) == 'generar_credenciales.php' ? 'active' : ''; ?>" href="gestion_credenciales.php">
-                    <i class="fas fa-id-card"></i>
-                    <span class="nav-text">Gestión de Credenciales</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'reportes.php' ? 'active' : ''; ?>" href="reportes.php">
-                    <i class="fas fa-chart-bar"></i>
-                    <span class="nav-text">Reportes</span>
-                </a>
-            </li>
-            <?php if ($_SESSION['user_role'] === 'sistemas' || $_SESSION['user_role'] === 'administrativo'): ?>
+                <?php endif; ?>
+                
+                <li class="nav-item">
+                    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'gestion_alumnos.php' ? 'active' : ''; ?>" href="gestion_alumnos.php">
+                        <i class="fas fa-user-graduate"></i>
+                        <span class="nav-text">Gestión de Alumnos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'gestion_modulos.php' ? 'active' : ''; ?>" href="gestion_modulos.php">
+                        <i class="fas fa-book-open"></i>
+                        <span class="nav-text">Gestión de Módulos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'asignar_modulos.php' ? 'active' : ''; ?>" href="asignar_modulos.php">
+                        <i class="fas fa-book"></i>
+                        <span class="nav-text">Asignar Módulos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'generar_boletas.php' ? 'active' : ''; ?>" href="generar_boletas.php">
+                        <i class="fas fa-file-alt"></i>
+                        <span class="nav-text">Generar Boletas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'plantillas_boletas.php' ? 'active' : ''; ?>" href="plantillas_boletas.php">
+                        <i class="fas fa-palette"></i>
+                        <span class="nav-text">Plantillas de Boletas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'gestion_credenciales.php' ? 'active' : ''; ?>" href="gestion_credenciales.php">
+                        <i class="fas fa-id-card"></i>
+                        <span class="nav-text">Gestión de Credenciales</span>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'enviar_notificacion.php' ? 'active' : ''; ?>" href="enviar_notificacion.php">
                         <i class="fas fa-bell"></i>
                         <span class="nav-text">Enviar Notificación</span>
                     </a>
                 </li>
-            <?php endif; ?>
-            <?php if ($_SESSION['user_role'] === 'sistemas' || $_SESSION['user_role'] === 'administrativo'): ?>
-<li class="nav-item">
-    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'gestion_notificaciones.php' ? 'active' : ''; ?>" href="gestion_notificaciones.php">
-        <i class="fas fa-bell"></i>
-        <span class="nav-text">Gestión de Notificaciones
-            <?php 
-            // Mostrar contador de no leídas que el usuario puede gestionar
-            if ($_SESSION['user_role'] !== 'sistemas') {
-                $db_count = new Database();
-                $db_count->query("SELECT COUNT(*) as total FROM notificaciones WHERE remitente_id = :user_id AND leido = FALSE AND eliminado = FALSE");
-                $db_count->bind(':user_id', $_SESSION['user_id']);
-                $count = $db_count->single();
-                if ($count['total'] > 0) {
-                    echo '<span class="badge bg-warning ms-1">' . $count['total'] . '</span>';
-                }
-            }
-            ?>
-        </span>
-    </a>
-</li>
-<?php endif; ?>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'gestion_notificaciones.php' ? 'active' : ''; ?>" href="gestion_notificaciones.php">
+                        <i class="fas fa-envelope"></i>
+                        <span class="nav-text">Gestión de Notificaciones
+                            <?php 
+                            if ($_SESSION['user_role'] !== 'sistemas') {
+                                $db_count = new Database();
+                                $db_count->query("SELECT COUNT(*) as total FROM notificaciones WHERE remitente_id = :user_id AND leido = FALSE AND eliminado = FALSE");
+                                $db_count->bind(':user_id', $_SESSION['user_id']);
+                                $count = $db_count->single();
+                                if ($count['total'] > 0) {
+                                    echo '<span class="badge bg-warning ms-1">' . $count['total'] . '</span>';
+                                }
+                            }
+                            ?>
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'reportes.php' ? 'active' : ''; ?>" href="reportes.php">
+                        <i class="fas fa-chart-bar"></i>
+                        <span class="nav-text">Reportes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'perfil.php' ? 'active' : ''; ?>" href="perfil.php">
+                        <i class="fas fa-user"></i>
+                        <span class="nav-text">Mi Perfil</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="sidebar-footer">
+        <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'perfil.php' ? 'active' : ''; ?>" href="perfil.php">
-                    <i class="fas fa-user"></i>
-                    <span class="nav-text">Mi Perfil</span>
-                </a>
-            </li>
-            <li class="nav-item mt-4">
                 <a class="nav-link text-danger" href="../logout.php">
                     <i class="fas fa-sign-out-alt"></i>
-                    <span class="nav-text">Cerrar Sesión</span>
+                    <span class="sidebar-footer-text">Cerrar Sesión</span>
                 </a>
             </li>
         </ul>
