@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="login-container">
         <div class="login-header">
-            <h2>🏫 <?php echo APP_NAME; ?></h2>
+            <h2><?php echo APP_NAME; ?></h2>
             <p>Inicia sesión para continuar</p>
         </div>
         

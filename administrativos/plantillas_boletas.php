@@ -257,6 +257,7 @@ $default_css = '
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.2/lib/codemirror.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.2/theme/monokai.css">
     <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/sidebar-toggle.js" defer></script>
     <style>
         .CodeMirror {
             border: 1px solid var(--border-color);
@@ -310,22 +311,19 @@ $default_css = '
             display: inline-block;
         }
     </style>
-     <!-- Sidebar Toggle JS -->
-    <script src="../assets/js/sidebar-toggle.js" defer></script>
 </head>
 <body>
     <!-- Sidebar -->
-    <?php include 'sidebarAdmin.php';?>
+    <?php include 'sidebarAdmin.php'; ?>
     
     <!-- Main Content -->
     <div class="main-content">
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
-                <!-- Sidebar Toggle Button -->
-<button class="sidebar-toggle-btn" id="sidebarToggle" aria-label="Toggle sidebar">
-    <i class="fas fa-bars"></i>
-</button>
+                <button class="sidebar-toggle-btn" id="sidebarToggle" aria-label="Toggle sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -338,8 +336,8 @@ $default_css = '
                                 <?php echo $_SESSION['user_name']; ?>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">
-                                    <i class="fas fa-cog me-2"></i> Configuración
+                                <li><a class="dropdown-item" href="perfil.php">
+                                    <i class="fas fa-user me-2"></i> Mi Perfil
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="../logout.php">
@@ -377,14 +375,22 @@ $default_css = '
                         </p>
                     </div>
                     <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#templateModal">
-                            <i class="fas fa-plus me-2"></i>Nueva Plantilla
-                        </button>
+                        <div class="d-flex gap-2 justify-content-md-end">
+                            <!-- Botón NUEVO: Crear con Asistente Visual -->
+                            <a href="crear_plantilla_asistente.php" class="btn btn-success" title="Crear con Asistente Visual">
+                                <i class="fas fa-magic me-1"></i>Crear con Asistente
+                            </a>
+                            
+                            <!-- Botón existente: Nueva Plantilla (Editor Avanzado) -->
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#templateModal">
+                                <i class="fas fa-plus me-1"></i>Nueva Plantilla
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Templates List -->
+            <!-- Plantillas List -->
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0"><i class="fas fa-list me-2"></i>Mis Plantillas</h5>
@@ -461,9 +467,14 @@ $default_css = '
                                             <div class="text-muted">
                                                 <i class="fas fa-palette fa-3x mb-3"></i>
                                                 <p>No hay plantillas creadas</p>
-                                                <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#templateModal">
-                                                    <i class="fas fa-plus me-2"></i>Crear Primera Plantilla
-                                                </button>
+                                                <div class="d-flex justify-content-center gap-3 mt-3">
+                                                    <a href="crear_plantilla_asistente.php" class="btn btn-success">
+                                                        <i class="fas fa-magic me-2"></i>Crear con Asistente Visual
+                                                    </a>
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#templateModal">
+                                                        <i class="fas fa-plus me-2"></i>Crear Plantilla Manual
+                                                    </button>
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
