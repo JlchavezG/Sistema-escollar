@@ -7,7 +7,7 @@
         <h3><?php echo APP_NAME; ?></h3>
         <p class="text-white-50 small">Profesor Panel</p>
     </div>
-    
+
     <div class="sidebar-menu">
         <ul class="nav flex-column">
             <li class="nav-item">
@@ -26,6 +26,23 @@
                 <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'ver_modulos.php' ? 'active' : ''; ?>" href="ver_modulos.php">
                     <i class="fas fa-book"></i>
                     <span class="nav-text">Mis Módulos</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'ver_notificaciones.php' ? 'active' : ''; ?>" href="ver_notificaciones.php">
+                    <i class="fas fa-bell"></i>
+                    <span class="nav-text">Notificaciones
+                        <?php
+                        // Mostrar contador de no leídas
+                        $db_count = new Database();
+                        $db_count->query("SELECT COUNT(*) as total FROM notificaciones WHERE destinatario_id = :destinatario_id AND leido = FALSE");
+                        $db_count->bind(':destinatario_id', $_SESSION['user_id']);
+                        $count = $db_count->single();
+                        if ($count['total'] > 0) {
+                            echo '<span class="badge bg-danger ms-1">' . $count['total'] . '</span>';
+                        }
+                        ?>
+                    </span>
                 </a>
             </li>
             <li class="nav-item">

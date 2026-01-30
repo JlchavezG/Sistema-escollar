@@ -361,6 +361,10 @@ $ultimas_calificaciones = $db->resultSet();
                 }
             });
         });
+        // Marcar como panel de profesor para el toast
+    document.body.classList.add('profesor-dashboard');
     </script>
+    <!-- Notification Toast System -->
+<script src="../assets/js/notificaciones_toast.js"></script>
 </body>
 </html>

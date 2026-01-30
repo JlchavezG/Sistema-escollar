@@ -1,0 +1,128 @@
+ .notification-form {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: var(--color-white);
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-xl);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Header mejorado SIN círculo problemático */
+        .form-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+            position: relative;
+        }
+
+        .form-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: var(--border-radius-full);
+        }
+
+        .form-header i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: block;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-header h2 {
+            font-weight: var(--font-weight-bold);
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-header p {
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-md);
+        }
+
+        .form-section {
+            margin-bottom: 1.8rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .form-section h5 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-color);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .priority-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: var(--border-radius-full);
+            font-weight: var(--font-weight-bold);
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .priority-informativa {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            color: #1565c0;
+            border: 1px solid #90caf9;
+        }
+
+        .priority-urgente {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            color: #b71c1c;
+            border: 1px solid #ef9a9a;
+        }
+
+        .priority-recordatorio {
+            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+            color: #5d4037;
+            border: 1px solid #ffd54f;
+        }
+
+        .priority-importante {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            color: #1b5e20;
+            border: 1px solid #a5d6a7;
+        }
+
+        /* Decorative elements */
+        .notification-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 50%, var(--accent-color) 100%);
+            border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-sm);
+        }
